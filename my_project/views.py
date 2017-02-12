@@ -10,9 +10,9 @@ class HomePageView(TemplateView):
         return render(request, 'index.html', context=None)
 
 class BookSellView(ListView):
-    model = sell_book
+    model = book
     def get(self, request, *args, **kwargs):
-        book = get_object_or_404(sell_book, pk = kwargs['book-id'])
+        book = get_object_or_404(book, pk = kwargs['book-id'])
         book = model_to_dict(book)
         return JsonResponse(model_name : data_dict)
     def post(self, request, *args, **kwargs):
@@ -22,9 +22,9 @@ class BookSellView(ListView):
 
 
 class BookBuyView(ListView):
-    model = buy_book
+    model = book
     def get(self, request, *args, **kwargs):
-        book = get_object_or_404(buy_book, pk = kwargs['book-id'])
+        book = get_object_or_404(book, pk = kwargs['book-id'])
         book = model_to_dict(book)
         return JsonResponse(model_name : data_dict)
     def post(self, request, *args, **kwargs):
