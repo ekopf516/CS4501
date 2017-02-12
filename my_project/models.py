@@ -6,6 +6,8 @@ class book(models.Model):
     publisher = models.CharField(max_length = 200)
     pub_date = models.DateTimeField('date published')
     isbn_num = models.charField(max_length = 10)
+    ISBN_num = models.CharField(max_length=10)
+    #in_stock = models.BooleanField()
 
 class user(models.Model):
     first_name = models.CharField(max_length=20)
@@ -26,5 +28,15 @@ class buyer(user):
     book_to_buy = models.ManyToManyField(buy_book)
 
 class inventory(book):
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    stock = models.IntegerField()
 
 class book_review(book):
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    rating = models.IntegerField()
+    reviews = models.CharField(max_length=500)
+    reviewer_name = models.CharField(max_length=300)
+    rev_date = models.DateTimeField('date published')
+
+
+
