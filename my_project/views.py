@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.shortcuts import render, get_object_or_404
-
+from .forms import UserForm, BookForm
 import json
 
 # Create your views here.
@@ -18,6 +18,7 @@ class BookSellView(ListView):
     def post(self, request, *args, **kwargs):
         data = request.body.decode('utf-8')
         data_dict = json.loads(data)
+        form = BookForm(data_dict)
         return HttpResponse('Good')
 
 
@@ -30,6 +31,13 @@ class BookBuyView(ListView):
     def post(self, request, *args, **kwargs):
         data = request.body.decode('utf-8')
         data_dict = json.loads(data)
+        #put this in John's views file
+        form = BookForm(data_dict)
+        #is_valid method to check if form valid before making database changes
+        if form.is_valid() :
+            if int(kwargs['book_id']) in sel.objects.values_list('pk', flat = True) :
+                return self.update(kwards['book_id'], data_dict)
+            form.save()
         return HttpResponse('Good')
 
 
