@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+   {% if Books %}
+   <h3>The Books</h3>
+   <ul>
+       {% for book in Books %}
+       <li> <a href="/book_display/{{ book }}/">{{ book }}</a></li>
+       {% endfor %}
+   </ul>
+   {% else %}
+       <strong>There are no books</strong>
+   {% endif %}
+   <p> <a href="/index">OK</a></p>
+{% endblock %}

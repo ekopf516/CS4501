@@ -15,19 +15,19 @@ class user(models.Model):
     password = models.CharField(max_length=30)
     bag = models.ManyToManyField(book)
 
-class seller(user):
-    book_to_sell = models.ManyToManyField(book)
+#class seller(user):
+#    book_to_sell = models.ManyToManyField(book)
+#
+#class buyer(user):
+#    book_to_buy = models.ManyToManyField(book)
 
-class buyer(user):
-    book_to_buy = models.ManyToManyField(book)
+#class inventory(book):
+#   book = models.ForeignKey(book, on_delete=models.CASCADE)
+#   stock = models.IntegerField()
 
-class inventory(book):
-    book = models.ForeignKey(book, on_delete=models.CASCADE)
-    stock = models.IntegerField()
-
-class book_review(book):
-    book = models.ForeignKey(book, on_delete=models.CASCADE)
-    rating = models.IntegerField()
-    reviews = models.CharField(max_length=500)
-    reviewer_name = models.CharField(max_length=300)
-    rev_date = models.DateTimeField('date published')
+#class book_review(book):
+#    book = models.ForeignKey(book, on_delete=models.CASCADE)
+#   rating = models.IntegerField()
+#   reviews = models.CharField(max_length=500)
+#   reviewer_name = models.CharField(max_length=300)
+#   rev_date = models.DateTimeField('date published')
