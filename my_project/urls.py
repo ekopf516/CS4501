@@ -13,7 +13,8 @@ book = [#url(r'book/sale/(?P<book_id>[0-9]+)', BookSellView.as_view()),
         #url(r'create/user/seller', SellerView.as_view()),
         #url(r'create/user/buyer', BuyerView.as_view()),
        ]
-views = [url(r'^user_display/', views.UserView),
+views = [url(r'^createUser/', views.createUser),
+         url(r'^user_display/', views.UserView),
          url(r'^user_display/(?P<user>[\w|\W]+)/$', views.viewUser),
          url(r'^book_display/', views.BookView),
          url(r'^book_display/(?P<book>[\w|\W]+)/$', views.viewBook),]

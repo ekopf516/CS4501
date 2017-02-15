@@ -1,12 +1,14 @@
 from django.http import JsonResponse
 from .forms import UserForm, BookForm
 from .models import user, book
+from django.shortcuts import render
 
 # Create your views here.
 def index(request):
     return render(request, 'index.html', context=None)
+
 def UserView(request):
-    users = user.objects
+    users = user.objects.all()
     UserIDs = []
     for usr in users:
         if (usr.id not in UserIDs):
@@ -26,11 +28,11 @@ def viewUser(request, user):
 
 
 def BookView(request):
-    books = book.objects
+    books = book.objects.all()
     BookIDs = []
-    for book in books:
-        if (book.id not in BookIDs):
-            BookIDs.append(book.id)
+    for bk in books:
+        if (bk.id not in BookIDs):
+            BookIDs.append(bk.id)
     return render(request, 'book_display.html', {'Books': BookIDs})
 
 def viewBook(request, book):
@@ -46,6 +48,19 @@ def viewBook(request, book):
     json['ID'] = theBook.id
     return JsonResponse(json)
 
+
+def createUser(request):
+    if request.method == "POST":
+        form = UserForm(data=request.POST)
+        if(form.is_valid()):
+            userName = UserForm.userName_clean(form)
+            firstName = UserForm.firstName_clean(form)
+            lastName = UserForm.lastName_clean(form)
+            password = UserForm.password_clean(form)
+            p = user(user_name=userName, first_name=firstName, last_name=lastName, password=password)
+            p.save()
+            return render(request, 'index.html',{'message': "Account Created!!\n"})
+    return render(request, 'createUser.html', {'form':form})
 
 
 

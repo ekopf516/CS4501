@@ -12,8 +12,8 @@ class user(models.Model):
     first_name = models.CharField(max_length=20)
     last_name  = models.CharField(max_length=20)
     user_name = models.CharField(max_length=30)
-    password = models.CharField(max_length=30)
-    bag = models.ManyToManyField(book)
+    password = models.CharField(max_length=30, default="password")
+    bag = models.ManyToManyField(book, default=None)
 
 #class seller(user):
 #    book_to_sell = models.ManyToManyField(book)
