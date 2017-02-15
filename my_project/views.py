@@ -2,6 +2,7 @@ from django.http import JsonResponse
 from .forms import UserForm, BookForm
 from .models import user, book
 from django.shortcuts import render
+import JSON
 
 # Create your views here.
 def index(request):
@@ -24,7 +25,8 @@ def viewUser(request, user):
     json ['last name'] = theUser.last_name
     json ['password'] = theUser.password
     json ['ID'] = theUser.id
-    return JsonResponse(json)
+    json = JSON.stringify(json)
+    return render(request, 'items.html', {'json': json})
 
 
 def BookView(request):
@@ -46,7 +48,8 @@ def viewBook(request, book):
     json['isbn'] = theBook.isbn_num
     json['price'] = theBook.price
     json['ID'] = theBook.id
-    return JsonResponse(json)
+    json = JSON.stringify(json)
+    return render(request, 'items.html', {'json':json})
 
 def createUser(request):
     if request.method == "POST":
