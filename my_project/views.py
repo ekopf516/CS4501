@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from .forms import UserForm, BookForm
 from .models import user, book
 from django.shortcuts import render
-import JSON
+import json
 
 # Create your views here.
 def index(request):
@@ -16,17 +16,17 @@ def UserView(request):
             UserIDs.append(usr.id)
     return render(request, 'user_display.html', {'Users': UserIDs})
 
-def viewUser(request, user):
-    theUser = user.objects.filter(id = user)
+def viewUser(request, user_id):
+    theUser = user.objects.filter(id = user_id)
     theUser = theUser.get()
     json = {}
-    json ['username'] = theUser.username
+    json ['username'] = theUser.user_name
     json ['first name'] = theUser.first_name
     json ['last name'] = theUser.last_name
     json ['password'] = theUser.password
     json ['ID'] = theUser.id
-    json = JSON.stringify(json)
-    return render(request, 'items.html', {'json': json})
+#return render(request, 'items.html', {'json': json})
+    return JsonResponse(json)
 
 
 def BookView(request):
@@ -37,8 +37,8 @@ def BookView(request):
             BookIDs.append(bk.id)
     return render(request, 'book_display.html', {'Books': BookIDs})
 
-def viewBook(request, book):
-    theBook = book.objects.filter(id=user)
+def viewBook(request, book_id):
+    theBook = book.objects.filter(id = book_id)
     theBook = theBook.get()
     json = {}
     json['title'] = theBook.title
@@ -48,8 +48,8 @@ def viewBook(request, book):
     json['isbn'] = theBook.isbn_num
     json['price'] = theBook.price
     json['ID'] = theBook.id
-    json = JSON.stringify(json)
-    return render(request, 'items.html', {'json':json})
+#return render(request, 'items.html', {'json':json})
+    return JsonResponse(json)
 
 def createUser(request):
     if request.method == "POST":
@@ -79,7 +79,7 @@ def createBook(request):
             isbn = BookForm.isbn_clean(form)
             b = book(isbn_num=isbn, author=author, title=title, pub_date=pub_date, publisher=pub, price=price)
             b.save()
-            return render(request, 'index.html',{'message': "Account Created!!\n"})
+            return render(request, 'index.html',{'message': "Book Created!!\n"})
         else: return render(request, 'createBook.html', {'form':form})
     form = BookForm()
     return render(request, 'createBook.html', {'form':form})

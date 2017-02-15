@@ -4,8 +4,8 @@
    {% if Users %}
    <h3>the Users</h3>
    <ul>
-       {% for user in Users %}
-       <li> <a href="/user_display/{{ user }}/">{{ user }}</a></li>
+       {% for user_id in Users %}
+       <li> <a href="/user_display/{{ user_id }}/">{{ user_id }}</a></li>
        {% endfor %}
    </ul>
    {% else %}

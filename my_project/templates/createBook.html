@@ -15,7 +15,7 @@
     <h1>{{message}}</h1>
     <h1> I got the sauce</h1>
     <h3> BOoks?!!!?! </h3>
-    <form action="/createUser/" method="post">
+    <form action="/createBook/" method="post">
     {% csrf_token %}
         {% for hidden in form.hidden_fields %}
             {{ hidden }}
