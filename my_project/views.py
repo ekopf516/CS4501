@@ -98,47 +98,35 @@ def createBook(request):
 
 
 def removeUser(request, user_id):
-#    if user.objects.filter(id = user_id)
-#        theUser = user.objects.filter(id= user_id)
-#        theUser.delete()
-#        response_data = {}
-#        response_data['result'] = '200'
-#        response_data['message'] = 'Succesfully removed user'
-#        return JsonResponse(response_data, safe = False)
-
-    
-    if user_id in request.GET:
+    if user.objects.filter(id = user_id):
         theUser = user.objects.filter(id = user_id)
         theUser = theUser.get()
-        if not theUser:
-            response_data = {}
-            response_data['result'] = '404'
-            response_data['message'] = "Not Found: user item not found"
-            return JsonResponse(response_data, safe = False)
-                
-        else:
-            theUser.delete()
-            response_data = {}
-            response_data['result'] = '200'
-            response_data['message'] = 'Succesfully removed user'
-            return JsonResponse(response_data, safe = False)
+        theUser.delete()
+        response_data = {}
+        response_data['result'] = '200'
+        response_data['message'] = 'Succesfully removed user'
+        return JsonResponse(response_data, safe = False)
+    else:
+        response_data = {}
+        response_data['result'] = '404'
+        response_data['message'] = "Not Found: user item not found"
+        return JsonResponse(response_data, safe = False)
 
-def removeBook(request):
-    if request.method == "POST":
-        book_id = request.POST["book_id"]
-        book = book.objects.filter(id = user_id)
-        if not book:
-            response_data = {}
-            response_data['result'] = '404'
-            response_data['message'] = "Not Found: user item not found"
-            return JsonResponse(response_data, safe = False)
-        
-        else:
-            book.delete()
-            response_data = {}
-            response_data['result'] = '200'
-            response_data['message'] = 'Succesfully removed user'
-            return JsonResponse(response_data, safe = False)
+
+def removeBook(request, book_id):
+    if book.objects.filter(id = book_id):
+        theBook = book.objects.filter(id = book_id)
+        theBook = theBook.get()
+        theBook.delete()
+        response_data = {}
+        response_data['result'] = '200'
+        response_data['message'] = 'Succesfully removed book'
+        return JsonResponse(response_data, safe = False)
+    else:
+        response_data = {}
+        response_data['result'] = '404'
+        response_data['message'] = "Not Found: book item not found"
+        return JsonResponse(response_data, safe = False)
 
 
 #class BookSellView(ListView):
