@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from .forms import UserForm, BookForm
+from .forms import UserForm
 from .models import user, book
 from django.shortcuts import render
 
@@ -48,7 +48,6 @@ def viewBook(request, book):
     json['ID'] = theBook.id
     return JsonResponse(json)
 
-
 def createUser(request):
     if request.method == "POST":
         form = UserForm(data=request.POST)
@@ -60,6 +59,8 @@ def createUser(request):
             p = user(user_name=userName, first_name=firstName, last_name=lastName, password=password)
             p.save()
             return render(request, 'index.html',{'message': "Account Created!!\n"})
+        else: return render(request, 'createUser.html', {'form':form})
+    form = UserForm()
     return render(request, 'createUser.html', {'form':form})
 
 

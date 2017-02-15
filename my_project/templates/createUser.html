@@ -1,9 +1,23 @@
 {% extends "base.html" %}
 
-<h3> Register User </h3>
+{% block content %}
+<html lang="en">
+<head>
+    <title>Create user</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+    <h1>{{message}}</h1>
+    <h1> Whatup</h1>
+    <h3> Register User </h3>
     <form action="/createUser/" method="post">
     {% csrf_token %}
-         {% for hidden in form.hidden_fields %}
+        {% for hidden in form.hidden_fields %}
             {{ hidden }}
         {% endfor %}
 
