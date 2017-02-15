@@ -17,11 +17,12 @@ views = [url(r'^createUser/', views.createUser),
          url(r'^user_display/(?P<user_id>[\w|\W]+)/$', views.viewUser),
          url(r'^user_display/', views.UserView),
          #url(r'^user_display/(?P<user>[\w|\W]+)/$', views.viewUser),
-         url(r'^user_display/remove/$', views.removeUser),
+         url(r'^user_display/(?P<user_id>[\w|\W]+)/$', views.removeUser),
          url(r'^book_display/(?P<book_id>[\w|\W]+)/$', views.viewBook),
          url(r'^book_display/', views.BookView),
          #url(r'^book_display/(?P<book_id>[\w|\W]+)/$', views.viewBook),
-         url(r'^createBook/', views.createBook)]
+         url(r'^createBook/', views.createBook),
+        url(r'book_display/remove/$', views.removeBook)]
 #user = [url(r'user/add/$', views.UserCreate.as_view(), name='add-user'),
 # ]
 urlpatterns = index + book + views

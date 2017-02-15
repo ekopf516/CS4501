@@ -17,7 +17,7 @@ def UserView(request):
     return render(request, 'user_display.html', {'Users': UserIDs})
 
 def viewUser(request, user_id):
-    if user_id in request.GET:
+    if user.objects.filter(id = user_id):
         theUser = user.objects.filter(id = user_id)
         theUser = theUser.get()
         json = {}
@@ -44,7 +44,7 @@ def BookView(request):
     return render(request, 'book_display.html', {'Books': BookIDs})
 
 def viewBook(request, book_id):
-    if book_id in request.GET:
+    if book.objects.filter(id = book_id):
         theBook = book.objects.filter(id = book_id)
         theBook = theBook.get()
         json = {}
@@ -97,29 +97,48 @@ def createBook(request):
     return render(request, 'createBook.html', {'form':form})
 
 
-def removeUser(request):
-    if request.method == "POST":
-        user_id = request.POST["user_id"]
-        if event_id == "ALL":
-            user.objects.all().delete()
+def removeUser(request, user_id):
+#    if user.objects.filter(id = user_id)
+#        theUser = user.objects.filter(id= user_id)
+#        theUser.delete()
+#        response_data = {}
+#        response_data['result'] = '200'
+#        response_data['message'] = 'Succesfully removed user'
+#        return JsonResponse(response_data, safe = False)
+
+    
+    if user_id in request.GET:
+        theUser = user.objects.filter(id = user_id)
+        theUser = theUser.get()
+        if not theUser:
+            response_data = {}
+            response_data['result'] = '404'
+            response_data['message'] = "Not Found: user item not found"
+            return JsonResponse(response_data, safe = False)
+                
+        else:
+            theUser.delete()
             response_data = {}
             response_data['result'] = '200'
-            response_data['message'] = 'Successfully removed all users'
+            response_data['message'] = 'Succesfully removed user'
             return JsonResponse(response_data, safe = False)
+
+def removeBook(request):
+    if request.method == "POST":
+        book_id = request.POST["book_id"]
+        book = book.objects.filter(id = user_id)
+        if not book:
+            response_data = {}
+            response_data['result'] = '404'
+            response_data['message'] = "Not Found: user item not found"
+            return JsonResponse(response_data, safe = False)
+        
         else:
-            theUser = user.objects.filter(id = user_id)
-            if not user:
-                response_data = {}
-                response_data['result'] = '404'
-                response_data['message'] = "Not Found: user item not found"
-                return JsonResponse(response_data, safe = False)
-                
-            else:
-                user.delete()
-                response_data = {}
-                response_data['result'] = '200'
-                response_data['message'] = 'Succesfully removed user'
-                return JsonResponse(response_data, safe = False)
+            book.delete()
+            response_data = {}
+            response_data['result'] = '200'
+            response_data['message'] = 'Succesfully removed user'
+            return JsonResponse(response_data, safe = False)
 
 
 #class BookSellView(ListView):
