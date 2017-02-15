@@ -17,16 +17,23 @@ def UserView(request):
     return render(request, 'user_display.html', {'Users': UserIDs})
 
 def viewUser(request, user_id):
-    theUser = user.objects.filter(id = user_id)
-    theUser = theUser.get()
-    json = {}
-    json ['username'] = theUser.user_name
-    json ['first name'] = theUser.first_name
-    json ['last name'] = theUser.last_name
-    json ['password'] = theUser.password
-    json ['ID'] = theUser.id
-#return render(request, 'items.html', {'json': json})
-    return JsonResponse(json)
+    if user in request.GET:
+        theUser = user.objects.filter(id = user_id)
+        theUser = theUser.get()
+        json = {}
+        json ['username'] = theUser.user_name
+        json ['first name'] = theUser.first_name
+        json ['last name'] = theUser.last_name
+        json ['password'] = theUser.password
+        json ['ID'] = theUser.id
+        return JsonResponse(json)
+    else:
+        return JsonResponse({
+                            "status":"error",
+                            "message": "No user was found with that ID",
+                            "data": None
+                            })
+
 
 
 def BookView(request):
@@ -38,18 +45,24 @@ def BookView(request):
     return render(request, 'book_display.html', {'Books': BookIDs})
 
 def viewBook(request, book_id):
-    theBook = book.objects.filter(id = book_id)
-    theBook = theBook.get()
-    json = {}
-    json['title'] = theBook.title
-    json['author'] = theBook.author
-    json['publisher'] = theBook.publisher
-    json['publication date'] = theBook.pub_date
-    json['isbn'] = theBook.isbn_num
-    json['price'] = theBook.price
-    json['ID'] = theBook.id
-#return render(request, 'items.html', {'json':json})
-    return JsonResponse(json)
+    if book in request.GET:
+        theBook = book.objects.filter(id = book_id)
+        theBook = theBook.get()
+        json = {}
+        json['title'] = theBook.title
+        json['author'] = theBook.author
+        json['publisher'] = theBook.publisher
+        json['publication date'] = theBook.pub_date
+        json['isbn'] = theBook.isbn_num
+        json['price'] = theBook.price
+        json['ID'] = theBook.id
+        return JsonResponse(json)
+    else:
+        return JsonResponse({
+                            "status":"error",
+                            "message":"No book was found with that ID",
+                            "data": None
+                            })
 
 def createUser(request):
     if request.method == "POST":
