@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from .forms import UserForm
+from .forms import UserForm, BookForm
 from .models import user, book
 from django.shortcuts import render
 
@@ -62,6 +62,24 @@ def createUser(request):
         else: return render(request, 'createUser.html', {'form':form})
     form = UserForm()
     return render(request, 'createUser.html', {'form':form})
+
+
+def createBook(request):
+    if request.method == "POST":
+        form = BookForm(data=request.POST)
+        if(form.is_valid()):
+            author = BookForm.author_clean(form)
+            title = BookForm.title_clean(form)
+            pub = BookForm.publisher_clean(form)
+            pub_date = BookForm.date_clean(form)
+            price = BookForm.price_clean(form)
+            isbn = BookForm.isbn_clean(form)
+            b = book(isbn_num=isbn, author=author, title=title, pub_date=pub_date, publisher=pub, price=price)
+            b.save()
+            return render(request, 'index.html',{'message': "Account Created!!\n"})
+        else: return render(request, 'createBook.html', {'form':form})
+    form = BookForm()
+    return render(request, 'createBook.html', {'form':form})
 
 
 

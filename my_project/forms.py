@@ -29,6 +29,25 @@ from .models import user, book
 #        book_author = forms.CharField(label='Author', min_length=4, max_length=100)
 #        isbn = forms.CharField(label='ISBN Number', min_length = 10, max_length=10)
 
+class BookForm(forms.Form):
+    title = forms.CharField(label='Title', min_length=4, max_length=30)
+    author = forms.CharField(label='Author', min_length=4, max_length=100)
+    isbn = forms.CharField(label='ISBN Number', min_length = 10, max_length=10)
+    publisher = forms.CharField(label='Publisher', min_length=4, max_length=100)
+    pub_date = forms.CharField(label='Publication Date', min_length=4, max_length=100)
+    price = forms.IntegerField(label='price', min_value=1)
+    def title_clean(self):
+        return self.cleaned_data['title']
+    def author_clean(self):
+        return self.cleaned_data['author']
+    def isbn_clean(self):
+        return self.cleaned_data['isbn']
+    def publisher_clean(self):
+        return self.cleaned_data['publisher']
+    def date_clean(self):
+        return self.cleaned_data['pub_date']
+    def price_clean(self):
+        return self.cleaned_data['price']
 
 class UserForm(forms.Form):
     firstName = forms.CharField(label='First Name', min_length=4, max_length=20)
