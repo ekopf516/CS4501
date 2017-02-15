@@ -17,7 +17,7 @@ def UserView(request):
     return render(request, 'user_display.html', {'Users': UserIDs})
 
 def viewUser(request, user_id):
-    if user in request.GET:
+    if user_id in request.GET:
         theUser = user.objects.filter(id = user_id)
         theUser = theUser.get()
         json = {}
@@ -35,7 +35,6 @@ def viewUser(request, user_id):
                             })
 
 
-
 def BookView(request):
     books = book.objects.all()
     BookIDs = []
@@ -45,7 +44,7 @@ def BookView(request):
     return render(request, 'book_display.html', {'Books': BookIDs})
 
 def viewBook(request, book_id):
-    if book in request.GET:
+    if book_id in request.GET:
         theBook = book.objects.filter(id = book_id)
         theBook = theBook.get()
         json = {}
@@ -97,6 +96,30 @@ def createBook(request):
     form = BookForm()
     return render(request, 'createBook.html', {'form':form})
 
+
+def removeUser(request):
+    if request.method == "POST":
+        user_id = request.POST["user_id"]
+        if event_id == "ALL":
+            user.objects.all().delete()
+            response_data = {}
+            response_data['result'] = '200'
+            response_data['message'] = 'Successfully removed all users'
+            return JsonResponse(response_data, safe = False)
+        else:
+            theUser = user.objects.filter(id = user_id)
+            if not user:
+                response_data = {}
+                response_data['result'] = '404'
+                response_data['message'] = "Not Found: user item not found"
+                return JsonResponse(response_data, safe = False)
+                
+            else:
+                user.delete()
+                response_data = {}
+                response_data['result'] = '200'
+                response_data['message'] = 'Succesfully removed user'
+                return JsonResponse(response_data, safe = False)
 
 
 #class BookSellView(ListView):

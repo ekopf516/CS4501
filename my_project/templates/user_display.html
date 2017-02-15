@@ -8,6 +8,9 @@
        <li> <a href="/user_display/{{ user_id }}/">{{ user_id }}</a></li>
        {% endfor %}
    </ul>
+    <ul>
+        <li> <a href ="/user_display/remove/{{ user_id }}/"> Remove {{user_id }}</a><li>
+    </ul>
    {% else %}
        <strong>There are no users</strong>
    {% endif %}
