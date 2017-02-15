@@ -7,6 +7,7 @@
        {% for user_id in Users %}
        <li> <a href="/user_display/{{ user_id }}/">{{ user_id }}</a></li>
        <li> <a href ="/removeUser/{{ user_id }}/"> Remove {{ user_id }}</a><li>
+           <li> <a href ="/user_edit/{{ user_id }}/"> Edit {{ user_id }}</a><li>
        {% endfor %}
    </ul>
    {% else %}

@@ -22,7 +22,9 @@ views = [url(r'^createUser/', views.createUser),
          url(r'^book_display/', views.BookView),
          #url(r'^book_display/(?P<book_id>[\w|\W]+)/$', views.viewBook),
          url(r'^createBook/', views.createBook),
-        url(r'^removeBook/(?P<book_id>[\w|\W]+)/$', views.removeBook)]
+        url(r'^removeBook/(?P<book_id>[\w|\W]+)/$', views.removeBook),
+         url(r'^user_edit/(?P<user_id>[\w|\W]+)/$', views.editUser),
+         url(r'^book_edit/(?P<book_id>[\w|\W]+)/$', views.editBook)]
 #user = [url(r'user/add/$', views.UserCreate.as_view(), name='add-user'),
 # ]
 urlpatterns = index + book + views

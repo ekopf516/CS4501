@@ -7,6 +7,7 @@
        {% for book in Books %}
        <li> <a href="/book_display/{{ book }}/">{{ book }}</a></li>
        <li> <a href="/removeBook/{{ book }}/"> Remove {{ book }} </a></li>
+       <li> <a href="/book_edit/{{ book }}/"> Edit {{ book }} </a></li>
        {% endfor %}
    </ul>
    {% else %}
