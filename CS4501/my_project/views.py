@@ -4,6 +4,30 @@ from django.forms import model_to_dict
 from .models import user, book
 from django.shortcuts import render, HttpResponse
 
+def allUsers(request):
+    if (request.method == "GET"):
+        userlist = []
+        for u in user.objects.all():
+            u_dict = model_to_dict(u, exclude=['bag'])
+            userlist.append(u_dict)
+        user_dict = {'match': userlist}
+        return JsonResponse({'status': True, 'resp': user_dict})
+
+    return JsonResponse({'status': False, 'resp': 'URL only handles GET requests'})
+
+
+def allBooks(request):
+    if (request.method == "GET"):
+        booklist = []
+        for b in book.objects.all():
+            b_dict = model_to_dict(b)
+            booklist.append(b_dict)
+        book_dict = {'match': booklist}
+        return JsonResponse({'status': True, 'resp': book_dict})
+
+    return JsonResponse({'status': False, 'resp': 'URL only handles GET requests'})
+
+
 def viewUser(request, user_id):
     if user.objects.filter(id=user_id):
         theUser = user.objects.get(pk=user_id)

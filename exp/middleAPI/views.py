@@ -3,23 +3,40 @@ import urllib.request
 import urllib.parse
 import json
 from django.http import JsonResponse
-
+import datetime
+from datetime import datetime as dtime
 
 
 def userInfo(request, user_id):
     if(request.method == "GET"):
-        req = urllib.request.Request('http://localhost:8001/user_display/' + user_id)
+        req = urllib.request.Request('http://models-api:8000/user_display/' + user_id + '/')
         resp_json = urllib.request.urlopen(req).read().decode('utf-8')
-        resp = json.loads(resp_json)
-        return JsonResponse({'status': True, 'resp': resp})
+        return JsonResponse({'status': True, 'resp': json.loads(resp_json)})
+
+    return JsonResponse({'status': False, 'resp': 'URL only handles GET requests'})
 
 def bookInfo(request, book_id):
     if (request.method == "GET"):
-        req = urllib.request.Request('http://localhost:8001/user_display/' + book_id)
+        req = urllib.request.Request('http://models-api:8000/book_display/' + book_id + '/')
+        resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+        return JsonResponse({'status': True, 'resp': json.loads(resp_json)})
+
+    return JsonResponse({'status': False, 'resp': 'URL only handles GET requests'})
+
+def recentlyPublished(request):
+    if (request.method == "GET"):
+        req = urllib.request.Request('http://models-api:8000/book_display/')
         resp_json = urllib.request.urlopen(req).read().decode('utf-8')
         resp = json.loads(resp_json)
-        return JsonResponse({'status': True, 'resp': resp})
+        books = resp['resp']['match']
+        booklist = []
+        for b in books:
+            if (dtime.strptime(b['pub_date'], "%Y-%m-%dT%H:%M:%SZ") >= datetime.datetime(year=2016, month=1, day=1)):
+                booklist.append(b)
+        book_dict = {'match': booklist}
+        return JsonResponse({'status': True, 'resp': book_dict})
 
+    return JsonResponse({'status': False, 'resp': 'URL only handles GET requests'})
 
 # make a POST request.
 # we urlencode the dictionary of values we're passing up and then make the POST request
