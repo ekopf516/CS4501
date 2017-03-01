@@ -1,0 +1,32 @@
+{% extends "base2.html" %}
+
+{% block content %}
+<h1>JEA and Books Home</h1>
+    <p> Welcome to <em>JEA and Books</em>!</p>
+
+{% load static %}
+    <img src="{% static 'mainpage/images/bookcase.jpg' %}" alt="Book Stock Pic" style="width:960px;height:540px;"/>
+        {% if NewReleases %}
+        <h3>New Releases:</h3>
+        <ul>
+        {% for title, id in NewReleases %}
+        <li> <a href="/book_display/{{ id }}/">{{ title }}</a></li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <strong>there are no New releases</strong>
+    {% endif %}
+
+
+    {% if AllBooks %}
+        <h3>All Books:</h3>
+        <ul>
+        {% for title, id in AllBooks %}
+        <li> <a href="/book_display/{{ id }}/">{{ title }}</a></li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <strong>there are no books</strong>
+    {% endif %}
+
+{% endblock %}

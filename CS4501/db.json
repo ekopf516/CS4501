@@ -1,0 +1,138 @@
+[
+{"model": "my_project.book", 
+"pk": 1, 
+"fields": {
+	"title": "Goats: a how to", 
+	"author": "Moose", 
+	"publisher": "TKE", 
+	"pub_date": "2017-02-27T00:00:00Z", 
+	"isbn_num": "9737223329", 
+	"price": 25
+	}
+}, 
+{
+"model": "my_project.book", 
+"pk": 2, 
+"fields": {
+	"title": "Hydrating the Goats", 
+	"author": "old guy", 
+	"publisher": "old stuff ince", 
+	"pub_date": "1212-12-12T00:00:00Z", 
+	"isbn_num": "1235555", 
+	"price": 70
+	}
+}, 
+{
+"model": "my_project.book", 
+"pk": 3, 
+"fields": {
+	"title": "Goat training; a 9 week process", 
+	"author": "old guy", 
+	"publisher": "old stuff inc", 
+	"pub_date": "1220-12-12T00:00:00Z", 
+	"isbn_num": "1236666", 
+	"price": 70
+	}
+}, 
+{
+"model": "my_project.book", 
+"pk": 4, 
+"fields": {
+	"title": "John's Life; living like john", 
+	"author": "John Marshall", 
+	"publisher": "the wicked cool people company", 
+	"pub_date": "1995-09-14T00:00:00Z", 
+	"isbn_num": "1212121212", "price": 2000
+	}
+}, 
+{
+"model": "my_project.book", 
+"pk": 5, 
+“fields": {
+	"title": "Goat; a survival guide",
+	"author": "Moose", 
+	"publisher": "Tke", 
+	"pub_date": "2017-02-28T00:00:00Z", 
+	"isbn_num": "703346444", 
+	"price": 2000
+	}
+}, 
+{
+"model": "my_project.book", 
+"pk": 6, 
+"fields": {
+	"title": "The college kids guide to alcoholism", 
+	"author": "John Marshall", 
+	"publisher": "sic! stuff books", 
+	"pub_date": "2017-01-05T00:00:00Z", 
+	"isbn_num": "667500504", 
+	"price": 80
+	}
+}, 
+{
+"model": "my_project.user", 
+"pk": 1, 
+"fields": {
+	"first_name": "John", 
+	"last_name": "Marshall", 
+	"user_name": "johnmars", 
+	"password": "wickedwicked!!", 
+	"bag": []
+	}
+}, 
+{
+"model": "my_project.user", 
+"pk": 2, 
+"fields": {
+	"first_name": "aaron", 
+	"last_name": "aguhob", 
+	"user_name": "AA ron", 
+	"password": "ISA.........", 
+	"bag": []
+	}
+}, 
+{
+"model": "my_project.user", 
+"pk": 3, 
+"fields": {
+	"first_name": "emma", 
+	"last_name": "kopf", 
+	"user_name": "M ah", 
+	"password": "more cs", 
+	"bag": []
+	}
+}, 
+{
+"model": "my_project.user", 
+”pk": 4,
+"fields": {
+	"first_name": "iantheta", 
+	"last_name": "zhang",
+	"user_name": "ian123", 
+	"password": "123456", 
+	"bag": []
+	}
+}, 
+{
+"model": "my_project.user", 
+"pk": 5, 
+"fields": {
+	"first_name": "billy joe", 
+	"last_name": "howdy", 
+	"user_name": "cowboy", 
+	"password": "yee haha", 
+	"bag": []
+	}
+}, 
+{
+"model": "my_project.user", 
+"pk": 6, 
+"fields": {
+	"first_name": "lamar", 
+	"last_name": "pinckney", 
+	"user_name": "my real name", 
+	"password": "deep down", 
+	"bag": []
+	}
+}
+]
