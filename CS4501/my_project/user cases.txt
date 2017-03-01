@@ -1,0 +1,13 @@
+1. As a user, I want to be able to retrieve an existing book so that I can decide whether or not I want to buy it.
+
+2. As a user, I want to be able to see other users' details so that I can see what other types of people are looking at books.
+
+3. As a user, I do not want to be able to see information on a book or user that does not exist in the database so that I do not get confused about what/who is available.
+
+4. As a user/seller, I want to be able to create a book so that I can share and sell it to other people.
+
+5. As a potential user, I want to be able to create my own profile so that I can easily buy books.
+
+6. As a seller, I want to be able to delete a book so that others cannot view and attempt to buy it.
+
+7. As a user, I want to be able to delete my profile when I no longer want to use the site. 
