@@ -10,8 +10,21 @@ from django.http import HttpResponse, JsonResponse
 #     resp = json.loads(resp_json)
 #     return render(request, 'index.html',)
 
-def recentlyPublished(request):
+def homePage(request):
     if (request.method == "GET"):
+        #New Releases
+        req = urllib.request.Request('http://exp-api:8000/recently_published/')
+        resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+        resp = json.loads(resp_json)
+        books = resp['resp']['match']
+        titles = []
+        ids = []
+        for b in books:
+            titles.append(b['title'])
+            ids.append(b['id'])
+        new = zip(titles, ids)
+
+        # All books
         req = urllib.request.Request('http://exp-api:8000/book_display/')
         resp_json = urllib.request.urlopen(req).read().decode('utf-8')
         resp = json.loads(resp_json)
@@ -21,8 +34,9 @@ def recentlyPublished(request):
         for b in books:
             titles.append(b['title'])
             ids.append(b['id'])
-        combined = zip(titles, ids)
-        return render(request, 'index.html', {'NewReleases': combined})
+        all = zip(titles, ids)
+
+        return render(request, 'index.html', {'NewReleases':  new, 'AllBooks': all})
     return HttpResponse("There are no recently published books.")
 
 def bookView(request, book_id):

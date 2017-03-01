@@ -17,4 +17,16 @@
         <strong>there are no New releases</strong>
     {% endif %}
 
+
+    {% if AllBooks %}
+        <h3>All Books:</h3>
+        <ul>
+        {% for title, id in AllBooks %}
+        <li> <a href="/book_display/{{ id }}/">{{ title }}</a></li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <strong>there are no books</strong>
+    {% endif %}
+
 {% endblock %}

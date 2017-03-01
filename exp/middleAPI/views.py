@@ -6,6 +6,20 @@ from django.http import JsonResponse
 import datetime
 from datetime import datetime as dtime
 
+def allBooks(request):
+    if (request.method == "GET"):
+        req = urllib.request.Request('http://models-api:8000/book_display/')
+        resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+        resp = json.loads(resp_json)
+        books = resp['resp']['match']
+        booklist = []
+        for b in books:
+            booklist.append(b)
+        book_dict = {'match': booklist}
+        return JsonResponse({'status': True, 'resp': book_dict})
+
+    return JsonResponse({'status': False, 'resp': 'URL only handles GET requests'})
+
 
 def userInfo(request, user_id):
     if(request.method == "GET"):
@@ -37,6 +51,10 @@ def recentlyPublished(request):
         return JsonResponse({'status': True, 'resp': book_dict})
 
     return JsonResponse({'status': False, 'resp': 'URL only handles GET requests'})
+
+
+
+
 
 # make a POST request.
 # we urlencode the dictionary of values we're passing up and then make the POST request
