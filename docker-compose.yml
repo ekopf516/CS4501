@@ -6,7 +6,7 @@ models:
         - ./CS4501:/app
     ports:
         - "8001:8000"
-    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py loaddata db.json && mod_wsgi-express start-server --working-directory /app --reload-on-changes /app/project1/wsgi.py"
+    command: bash -c "python manage.py makemigrations my_project && python manage.py migrate && python manage.py loaddata db.json && mod_wsgi-express start-server --working-directory /app --reload-on-changes /app/project1/wsgi.py"
 
 exp:
    image: tp33/django
