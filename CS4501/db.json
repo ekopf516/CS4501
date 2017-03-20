@@ -48,7 +48,7 @@
 {
 "model": "my_project.book", 
 "pk": 5, 
-“fields": {
+"fields": {
 	"title": "Goat; a survival guide",
 	"author": "Moose", 
 	"publisher": "Tke", 
@@ -104,7 +104,7 @@
 }, 
 {
 "model": "my_project.user", 
-”pk": 4,
+"pk": 4,
 "fields": {
 	"first_name": "iantheta", 
 	"last_name": "zhang",
