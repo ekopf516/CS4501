@@ -4,7 +4,7 @@ class book(models.Model):
     title = models.CharField(max_length = 200)
     author = models.CharField(max_length = 200)
     publisher = models.CharField(max_length = 200)
-    pub_date = models.DateTimeField('date published')
+    pub_date = models.DateField('date published')
     isbn_num = models.CharField(max_length = 10)
     price = models.IntegerField(default=0)
 

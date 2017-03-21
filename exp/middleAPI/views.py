@@ -37,18 +37,36 @@ def bookInfo(request, book_id):
 
     return JsonResponse({'status': False, 'resp': 'URL only handles GET requests'})
 
-def recentlyPublished(request):
+def homepage(request):
     if (request.method == "GET"):
+
+        # New Releases
+        req = urllib.request.Request('http://models-api:8000/recently_published/')
+        resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+        resp = json.loads(resp_json)
+        books = resp['resp']['match']
+        titles = []
+        ids = []
+        for b in books:
+            titles.append(b['title'])
+            ids.append(b['id'])
+        new = {'titles': titles, 'ids': ids}
+
+        # All books
         req = urllib.request.Request('http://models-api:8000/book_display/')
         resp_json = urllib.request.urlopen(req).read().decode('utf-8')
         resp = json.loads(resp_json)
         books = resp['resp']['match']
-        booklist = []
+        titles = []
+        ids = []
         for b in books:
-            if (dtime.strptime(b['pub_date'], "%Y-%m-%dT%H:%M:%SZ") >= datetime.datetime(year=2016, month=1, day=1)):
-                booklist.append(b)
-        book_dict = {'match': booklist}
-        return JsonResponse({'status': True, 'resp': book_dict})
+            titles.append(b['title'])
+            ids.append(b['id'])
+        all = {'titles': titles, 'ids': ids}
+
+        home = {'new': new, 'all': all}
+
+        return JsonResponse({'status': True, 'resp': home})
 
     return JsonResponse({'status': False, 'resp': 'URL only handles GET requests'})
 

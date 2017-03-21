@@ -9,4 +9,5 @@ urlpatterns = [url(r'^createUser/', views.createUser),
                url(r'^user_display/', views.allUsers),
                url(r'^book_display/', views.allBooks),
                url(r'^removeUser/(?P<user_id>[\w|\W]+)/$', views.removeUser),
-               url(r'^removeBook/(?P<book_id>[\w|\W]+)/$', views.removeBook),]
+               url(r'^removeBook/(?P<book_id>[\w|\W]+)/$', views.removeBook),
+               url(r'^recently_published/', views.recentlyPublished),]

@@ -2,6 +2,9 @@ from django.http import JsonResponse
 from .forms import UserForm, BookForm
 from django.forms import model_to_dict
 from .models import user, book
+from datetime import datetime as dtime
+import datetime
+from django.utils import timezone
 from django.shortcuts import render, HttpResponse
 
 def allUsers(request):
@@ -22,6 +25,18 @@ def allBooks(request):
         for b in book.objects.all():
             b_dict = model_to_dict(b)
             booklist.append(b_dict)
+        book_dict = {'match': booklist}
+        return JsonResponse({'status': True, 'resp': book_dict})
+
+    return JsonResponse({'status': False, 'resp': 'URL only handles GET requests'})
+
+def recentlyPublished(request):
+    if (request.method == "GET"):
+        booklist = []
+        for b in book.objects.all():
+            #dtime.strptime(b.pub_date, "%Y-%m-%dT%H:%M:%SZ")
+            if(b.pub_date >= timezone.datetime(day=1,month=1,year=2016)):
+                booklist.append(model_to_dict(b))
         book_dict = {'match': booklist}
         return JsonResponse({'status': True, 'resp': book_dict})
 
