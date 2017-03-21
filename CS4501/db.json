@@ -5,7 +5,7 @@
 	"title": "Goats: a how to", 
 	"author": "Moose", 
 	"publisher": "TKE", 
-	"pub_date": "2017-02-27T00:00:00Z", 
+	"pub_date": "2017-02-27",
 	"isbn_num": "9737223329", 
 	"price": 25
 	}
@@ -17,7 +17,7 @@
 	"title": "Hydrating the Goats", 
 	"author": "old guy", 
 	"publisher": "old stuff ince", 
-	"pub_date": "1212-12-12T00:00:00Z", 
+	"pub_date": "1212-12-12",
 	"isbn_num": "1235555", 
 	"price": 70
 	}
@@ -29,7 +29,7 @@
 	"title": "Goat training; a 9 week process", 
 	"author": "old guy", 
 	"publisher": "old stuff inc", 
-	"pub_date": "1220-12-12T00:00:00Z", 
+	"pub_date": "1220-12-12",
 	"isbn_num": "1236666", 
 	"price": 70
 	}
@@ -41,7 +41,7 @@
 	"title": "John's Life; living like john", 
 	"author": "John Marshall", 
 	"publisher": "the wicked cool people company", 
-	"pub_date": "1995-09-14T00:00:00Z", 
+	"pub_date": "1995-09-14",
 	"isbn_num": "1212121212", "price": 2000
 	}
 }, 
@@ -52,7 +52,7 @@
 	"title": "Goat; a survival guide",
 	"author": "Moose", 
 	"publisher": "Tke", 
-	"pub_date": "2017-02-28T00:00:00Z", 
+	"pub_date": "2017-02-28",
 	"isbn_num": "703346444", 
 	"price": 2000
 	}
@@ -64,7 +64,7 @@
 	"title": "The college kids guide to alcoholism", 
 	"author": "John Marshall", 
 	"publisher": "sic! stuff books", 
-	"pub_date": "2017-01-05T00:00:00Z", 
+	"pub_date": "2017-01-05",
 	"isbn_num": "667500504", 
 	"price": 80
 	}

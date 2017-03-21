@@ -35,7 +35,7 @@ def recentlyPublished(request):
         booklist = []
         for b in book.objects.all():
             #dtime.strptime(b.pub_date, "%Y-%m-%dT%H:%M:%SZ")
-            if(b.pub_date >= timezone.datetime(day=1,month=1,year=2016)):
+            if(b.pub_date >= datetime.date(day=1,month=1,year=2016)):
                 booklist.append(model_to_dict(b))
         book_dict = {'match': booklist}
         return JsonResponse({'status': True, 'resp': book_dict})
