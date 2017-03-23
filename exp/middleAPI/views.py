@@ -5,6 +5,8 @@ import json
 from django.http import JsonResponse
 import datetime
 from datetime import datetime as dtime
+from . import forms
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
 
 def allBooks(request):
     if (request.method == "GET"):
@@ -70,22 +72,47 @@ def homepage(request):
 
     return JsonResponse({'status': False, 'resp': 'URL only handles GET requests'})
 
+def login(request):
+    if(request.method == 'POST'):
+        f = forms.login_form(request.POST)
+        if (f.is_valid()):
+            username = f.cleaned_data['user_name']
+            password = f.cleaned_data['password']
+            post_data = {'user_name': username, 'password': password, 'last_name': 'a', 'first_name': 'b'}
+            post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
+            req = urllib.request.Request(url='http://models-api:8000/login/', data=post_encoded, method='POST')
+            resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+            resp = json.loads(resp_json)
+            return JsonResponse({'status': True, 'resp': resp})
+        else: return JsonResponse({'status': False, 'resp': 'invalid input'})
+    return JsonResponse({'status': False, 'resp': 'URL only handles POST requests'})
 
 
+def fetch_user_name(request):
+    if(request.method == 'POST'):
+        f = forms.authenticate_form(request.POST)
+        if(f.is_valid()):
+            authenticator = f.cleaned_data['authenticator']
+            post_data = {'authenticator': authenticator}
+            post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
+            req = urllib.request.Request('http://models-api:8000/authenticate/', data=post_encoded, method='POST')
+            resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+            resp = json.loads(resp_json)
+            return JsonResponse({'status': True, 'resp': resp})
+        else: return JsonResponse({'status': False, 'resp': 'invalid input'})
+    return JsonResponse({'status': False, 'resp': 'URL only handles POST requests'})
 
 
-# make a POST request.
-# we urlencode the dictionary of values we're passing up and then make the POST request
-# again, no error handling
-
-# print("About to perform the POST request...")
-#
-# post_data = {'title': 'Demo Post', 'body': 'This is a test', 'userId': 1}
-#
-# post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
-#
-# req = urllib.request.Request('http://placeholder.com/v1/api/posts/create', data=post_encoded, method='POST')
-# resp_json = urllib.request.urlopen(req).read().decode('utf-8')
-#
-# resp = json.loads(resp_json)
-# print(resp)
+def logout(request):
+    if(request.method == 'POST'):
+        f = forms.authenticate_form(request.POST)
+        if(f.is_valid()):
+            authenticator = f.cleaned_data['authenticator']
+            post_data = {'authenticator': authenticator}
+            post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
+            req = urllib.request.Request('http://models-api:8000/logout/', data=post_encoded, method='POST')
+            resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+            resp = json.loads(resp_json)
+            return JsonResponse({'status': True, 'resp': resp})
+        else: return JsonResponse({'status': False, 'resp': 'invalid input'})
+    return JsonResponse({'status': False, 'resp': 'URL only handles POST requests'})

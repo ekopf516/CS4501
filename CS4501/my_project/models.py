@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 class book(models.Model):
     title = models.CharField(max_length = 200)
@@ -12,8 +13,14 @@ class user(models.Model):
     first_name = models.CharField(max_length=20)
     last_name  = models.CharField(max_length=20)
     user_name = models.CharField(max_length=30)
+    #need to check for duplicates
     password = models.CharField(max_length=30, default="password")
     bag = models.ManyToManyField(book, default=None)
+
+class Authenticator(models.Model):
+    user_id = models.IntegerField()
+    date_created = models.DateTimeField(default=timezone.now)
+    authenticator = models.CharField(max_length = 900, default='')
 
 #class seller(user):
 #    book_to_sell = models.ManyToManyField(book)

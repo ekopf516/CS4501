@@ -2,7 +2,11 @@
 
 {% block content %}
 <h1>JEA and Books Home</h1>
-    <p> Welcome to <em>JEA and Books</em>!</p>
+    {% if message %}
+        <p> Welcome {{ message }} to <em>JEA and Books</em>!</p>
+    {% else %}
+        <p> Welcome to <em>JEA and Books</em>!</p>
+    {% endif %}
 
 {% load static %}
     <img src="{% static 'mainpage/images/bookcase.jpg' %}" alt="Book Stock Pic" style="width:960px;height:540px;"/>

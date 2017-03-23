@@ -1,11 +1,15 @@
 from django.http import JsonResponse
-from .forms import UserForm, BookForm
+from .forms import UserForm, BookForm, authenticate_form
 from django.forms import model_to_dict
-from .models import user, book
+from .models import user, book, Authenticator
 from datetime import datetime as dtime
 import datetime
 from django.utils import timezone
 from django.shortcuts import render, HttpResponse
+import os
+import hmac
+from project1 import settings
+from django.views.decorators.csrf import csrf_protect
 
 def allUsers(request):
     if (request.method == "GET"):
@@ -97,7 +101,7 @@ def createUser(request):
         form = UserForm(data=request.POST)
         if(form.is_valid()):
             form.save()
-            return JsonResponse({'status': True, 'resp' : 'user has been created.'})
+            return login(request)
         else: return JsonResponse({'status': False, 'resp': 'invalid input'})
     return JsonResponse({'status' : False, 'resp': 'This URL only handles POST requests'})
 
@@ -117,7 +121,7 @@ def removeUser(request, user_id):
         theUser.delete()
         return JsonResponse({'status': True, 'resp': 'User Deleted'}, safe = False)
     else:
-        return JsonResponse({'status': False, 'resp': 'User Not Found'}, safe=False)
+        return JsonResponse({'status': False, 'resp': 'User Not Found'}, safe = False)
 
 
 def removeBook(request, book_id):
@@ -126,9 +130,72 @@ def removeBook(request, book_id):
         theBook.delete()
         return JsonResponse({'status': True, 'resp': 'Book Deleted'}, safe = False)
     else:
-        return JsonResponse({'status': False, 'resp': 'Book Not Found'}, safe=False)
+        return JsonResponse({'status': False, 'resp': 'Book Not Found'}, safe = False)
 
+#@csrf_protect
+def login(request):
+    if request.method == "POST":
+        form = UserForm(data=request.POST)
+        nouser = True
+        if(form.is_valid()):
+            for u in user.objects.all():
+                if (u.user_name == form.cleaned_data['user_name']):
+                    theuser = u
+                    nouser = False
+            if nouser:
+                return JsonResponse({'status': False, 'resp': 'invalid user info'})
 
+            if (theuser.password == form.cleaned_data['password']):
+                unique = True
+                while (unique):
+                    authenticator = hmac.new(
+                        key=settings.SECRET_KEY.encode('utf-8'),
+                        msg=os.urandom(32),
+                        digestmod='sha256',
+                    ).hexdigest()
+                    unique = False
+                    for a in Authenticator.objects.all():
+                        if (a == authenticator): unique = True
+                auth = Authenticator(authenticator=authenticator, user_id=theuser.pk)
+                auth.save()
+                auth_dict = model_to_dict(auth)
+                return JsonResponse({'status': True, 'resp': auth_dict})
+            else:
+                return JsonResponse({'status': False, 'resp': 'invalid user info'})
+    return JsonResponse({'status' : False, 'resp': 'This URL only handles POST requests'})
 
+def authenticate(request):
+    if request.method == "POST":
+        form = authenticate_form(data=request.POST)
+        noauth = True
+        if(form.is_valid()):
+            for a in Authenticator.objects.all():
+                if(a.date_created < (timezone.now()-datetime.timedelta(1))):
+                    a.delete()
+            for a in Authenticator.objects.all():
+                if (a.authenticator == form.cleaned_data['authenticator']):
+                    auth = a
+                    noauth = False
+            if noauth:
+                return JsonResponse({'status': False, 'resp': 'user not authorized'})
+
+            for u in user.objects.all():
+                if (auth.user_id == u.pk):
+                    user_name = u.user_name
+
+            return JsonResponse({'status': True, 'resp': {'user_name': user_name}})
+        else: return JsonResponse({'status': False, 'resp': 'invalid user info'})
+    return JsonResponse({'status' : False, 'resp': 'This URL only handles POST requests'})
+
+def logout(request):
+    if request.method == "POST":
+        form = authenticate_form(data=request.POST)
+        if(form.is_valid()):
+            for a in Authenticator.objects.all():
+                if (a.authenticator == form.cleaned_data['authenticator']):
+                    a.delete()
+                    return JsonResponse({'status': True, 'resp': 'user logged out'})
+        else: return JsonResponse({'status': False, 'resp': 'invalid user info'})
+    return JsonResponse({'status' : False, 'resp': 'This URL only handles POST requests'})
 
 
