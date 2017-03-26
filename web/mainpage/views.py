@@ -15,7 +15,7 @@ from http import cookiejar
 def homePage(request):
     if (request.method == "GET"):
         #check if authenticated
-        message = ''
+        message = None
         if(request.COOKIES.get('auth', False)):
             authenticator = request.COOKIES['auth']
             post_data = {'authenticator': authenticator}

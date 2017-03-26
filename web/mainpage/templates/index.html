@@ -1,16 +1,14 @@
 {% extends "base2.html" %}
 
 {% block content %}
-<h1>JEA and Books Home</h1>
+<h1 >JEA & Books Home</h1>
     {% if message %}
-        <p> Welcome {{ message }} to <em>JEA and Books</em>!</p>
+        <p> Welcome {{ message }} to <em>JEA & Books</em>!</p>
     {% else %}
-        <p> Welcome to <em>JEA and Books</em>!</p>
+        <p> Welcome to <em>JEA & Books</em>!</p>
     {% endif %}
 
-{% load static %}
-    <img src="{% static 'mainpage/images/bookcase.jpg' %}" alt="Book Stock Pic" style="width:960px;height:540px;"/>
-        {% if NewReleases %}
+    {% if NewReleases %}
         <h3>New Releases:</h3>
         <ul>
         {% for title, id in NewReleases %}
@@ -32,5 +30,7 @@
     {% else %}
         <strong>there are no books</strong>
     {% endif %}
+
+
 
 {% endblock %}
