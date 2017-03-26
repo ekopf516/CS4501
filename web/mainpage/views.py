@@ -5,17 +5,10 @@ from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from . import forms
 from http import cookiejar
 
-# Create your views here.
-# def index(request):
-#     req = urllib.request.Request('http://localhost:8001/user_display/')
-#     resp_json = urllib.request.urlopen(req).read().decode('utf-8')
-#     resp = json.loads(resp_json)
-#     return render(request, 'index.html',)
-
 def homePage(request):
     if (request.method == "GET"):
         #check if authenticated
-        message = None
+        username = None
         if(request.COOKIES.get('auth', False)):
             authenticator = request.COOKIES['auth']
             post_data = {'authenticator': authenticator}
@@ -25,7 +18,7 @@ def homePage(request):
             resp = json.loads(resp_json)
 
             if (resp['resp']['status']):
-                message = resp['resp']['resp']['user_name']
+                username = resp['resp']['resp']['user_name']
 
         req = urllib.request.Request('http://exp-api:8000/home_page/')
         resp_json = urllib.request.urlopen(req).read().decode('utf-8')
@@ -39,7 +32,7 @@ def homePage(request):
         ids = resp['resp']['all']['ids']
         all = zip(titles, ids)
 
-        return render(request, 'index.html', {'NewReleases':  new, 'AllBooks': all, 'username': message})
+        return render(request, 'index.html', {'NewReleases':  new, 'AllBooks': all, 'username': username})
     return HttpResponse("There are no recently published books.")
 
 def bookView(request, book_id):
@@ -55,10 +48,26 @@ def bookView(request, book_id):
 
 def login(request):
     # If we received a GET request instead of a POST request
+    username = None
+    if (request.COOKIES.get('auth', False)):
+        authenticator = request.COOKIES['auth']
+        post_data = {'authenticator': authenticator}
+        post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
+        req = urllib.request.Request('http://exp-api:8000/authenticate/', data=post_encoded, method='POST')
+        resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+        resp = json.loads(resp_json)
+
+        if (resp['resp']['status']):
+            username = resp['resp']['resp']['user_name']
+
     if request.method == 'GET':
         # display the login form page
+        message = ''
+        if(username):
+            message = "you are already logged in"
+
         form = forms.login_form()
-        return render(request, 'login.html', {'form': form})
+        return render(request, 'login.html', {'form': form, 'username': username, 'message': message})
 
     # Creates a new instance of our login_form and gives it our POST data
     f = forms.login_form(request.POST)
@@ -67,7 +76,7 @@ def login(request):
     if not f.is_valid():
       # Form was bad -- send them back to login page and show them an error
       form = forms.login_form()
-      return render(request, 'login.html', {'message': 'invalid input', 'form': form})
+      return render(request, 'login.html', {'message': 'invalid input', 'form': form, 'username': username})
 
     # Sanitize username and password fields
     username = f.cleaned_data['user_name']
@@ -84,7 +93,7 @@ def login(request):
     if (not resp['resp']['status']):
       # Couldn't log them in, send them back to login page with error
       form = forms.login_form()
-      return render(request, 'login.html', {'message': 'username or password is incorrect', 'form': form})
+      return render(request, 'login.html', {'message': 'username or password is incorrect', 'form': form, 'username':username})
 
     #If we made it here, we can log them in.
     # Set their login cookie and redirect to back to wherever they came from
@@ -111,8 +120,21 @@ def logout(request):
     else: return HttpResponseRedirect('http://localhost:8000/login/')
 
 def create_user(request):
+    username = None
     if (request.COOKIES.get('auth', False)):
-        return render(request, 'create_user.html', {'message': "please logout first"})
+        authenticator = request.COOKIES['auth']
+        post_data = {'authenticator': authenticator}
+        post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
+        req = urllib.request.Request('http://exp-api:8000/authenticate/', data=post_encoded, method='POST')
+        resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+        resp = json.loads(resp_json)
+
+        if (resp['resp']['status']):
+            username = resp['resp']['resp']['user_name']
+
+    if (request.COOKIES.get('auth', False) and request.method == 'GET'):
+        form = forms.user_info()
+        return render(request, 'create_user.html', {'message': "you are already logged in are you sure you want to create another account?", 'form': form, 'username': username})
 
     if request.method == 'GET':
         form = forms.user_info()
@@ -124,7 +146,7 @@ def create_user(request):
     if not f.is_valid():
         # Form was bad -- send them back to login page and show them an error
         form = forms.user_info()
-        return render(request, 'create_user.html', {'message': 'invalid input', 'form': form})
+        return render(request, 'create_user.html', {'message': 'invalid input', 'form': form, 'username': username})
 
     # Sanitize username and password fields
     username = f.cleaned_data['user_name']
@@ -141,11 +163,11 @@ def create_user(request):
 
     if (not resp['status']):
         form = forms.user_info()
-        return render(request, 'create_user.html', {'message': resp['resp'], 'form': form})
+        return render(request, 'create_user.html', {'message': resp['resp'], 'form': form, 'username': username})
 
     if (not resp['resp']['status']):
         form = forms.user_info()
-        return render(request, 'create_user.html', {'message': resp['resp']['resp'], 'form': form})
+        return render(request, 'create_user.html', {'message': resp['resp']['resp'], 'form': form, 'username':username})
 
     # If we made it here, we can log them in.
     # Set their login cookie and redirect to back to wherever they came from
