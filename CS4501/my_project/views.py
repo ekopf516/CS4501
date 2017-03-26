@@ -100,6 +100,9 @@ def createUser(request):
     if request.method == "POST":
         form = UserForm(data=request.POST)
         if(form.is_valid()):
+            for u in user.objects.all():
+                if(form.cleaned_data['user_name'] == u.user_name):
+                    return JsonResponse({'status': False, 'resp': 'user already exists'})
             form.save()
             return login(request)
         else: return JsonResponse({'status': False, 'resp': 'invalid input'})

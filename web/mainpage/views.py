@@ -15,7 +15,7 @@ from http import cookiejar
 def homePage(request):
     if (request.method == "GET"):
         #check if authenticated
-        message = ''
+        message = None
         if(request.COOKIES.get('auth', False)):
             authenticator = request.COOKIES['auth']
             post_data = {'authenticator': authenticator}
@@ -40,7 +40,7 @@ def homePage(request):
         all = zip(titles, ids)
 
 
-        return render(request, 'index.html', {'NewReleases':  new, 'AllBooks': all, 'message': message})
+        return render(request, 'index.html', {'NewReleases':  new, 'AllBooks': all, 'user_name': message})
     return HttpResponse("There are no recently published books.")
 
 def bookView(request, book_id):
@@ -110,3 +110,52 @@ def logout(request):
             response.delete_cookie('auth')
         return response
     else: return HttpResponseRedirect('http://localhost:8000/login/')
+
+def create_user(request):
+    if (request.COOKIES.get('auth', False)):
+        return render(request, 'create_user.html', {'message': "please logout first"})
+
+    if request.method == 'GET':
+        form = forms.user_info()
+        return render(request, 'create_user.html', {'form': form})
+
+    f = forms.user_info(request.POST)
+
+    # Check if the form instance is invalid
+    if not f.is_valid():
+        # Form was bad -- send them back to login page and show them an error
+        form = forms.user_info()
+        return render(request, 'create_user.html', {'message': 'invalid input', 'form': form})
+
+    # Sanitize username and password fields
+    username = f.cleaned_data['user_name']
+    password = f.cleaned_data['password']
+    lastname = f.cleaned_data['last_name']
+    firstname = f.cleaned_data['first_name']
+
+    # Send validated information to our experience layer
+    post_data = {'user_name': username, 'password': password, 'last_name': lastname, 'first_name': firstname}
+    post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
+    req = urllib.request.Request('http://exp-api:8000/create_user/', data=post_encoded, method='POST')
+    resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+    resp = json.loads(resp_json)
+
+    if (not resp['status']):
+        form = forms.user_info()
+        return render(request, 'create_user.html', {'message': resp['resp'], 'form': form})
+
+    if (not resp['resp']['status']):
+        form = forms.user_info()
+        return render(request, 'create_user.html', {'message': resp['resp']['resp'], 'form': form})
+
+    # If we made it here, we can log them in.
+    # Set their login cookie and redirect to back to wherever they came from
+    authenticator = resp['resp']['resp']['authenticator']
+
+    response = HttpResponseRedirect('http://localhost:8000/home/')
+    response.set_cookie("auth", authenticator)
+
+    return response
+
+
+# def create_book_listing(request):

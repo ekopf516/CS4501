@@ -87,6 +87,22 @@ def login(request):
         else: return JsonResponse({'status': False, 'resp': 'invalid input'})
     return JsonResponse({'status': False, 'resp': 'URL only handles POST requests'})
 
+def create_user(request):
+    if(request.method == 'POST'):
+        f = forms.user_info(request.POST)
+        if (f.is_valid()):
+            username = f.cleaned_data['user_name']
+            password = f.cleaned_data['password']
+            lastname = f.cleaned_data['last_name']
+            firstname = f.cleaned_data['first_name']
+            post_data = {'user_name': username, 'password': password, 'last_name': lastname, 'first_name': firstname}
+            post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
+            req = urllib.request.Request(url='http://models-api:8000/createUser/', data=post_encoded, method='POST')
+            resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+            resp = json.loads(resp_json)
+            return JsonResponse({'status': True, 'resp': resp})
+        else: return JsonResponse({'status': False, 'resp': 'invalid input'})
+    return JsonResponse({'status': False, 'resp': 'URL only handles POST requests'})
 
 def fetch_user_name(request):
     if(request.method == 'POST'):
