@@ -39,8 +39,7 @@ def homePage(request):
         ids = resp['resp']['all']['ids']
         all = zip(titles, ids)
 
-
-        return render(request, 'index.html', {'NewReleases':  new, 'AllBooks': all, 'user_name': message})
+        return render(request, 'index.html', {'NewReleases':  new, 'AllBooks': all, 'username': message})
     return HttpResponse("There are no recently published books.")
 
 def bookView(request, book_id):
