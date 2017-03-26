@@ -6,7 +6,7 @@
 
 {{ message }}
 <form id="login_form" method="post" action="">
-    <!--{% csrf_token %}-->
+    {% csrf_token %}
     {{ form }}
     <input type="submit" value="Login" />
 </form>
