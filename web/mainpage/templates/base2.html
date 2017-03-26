@@ -4,7 +4,7 @@
 <nav class="navbar navbar-inverse">
     <div class="container-fluid">
 
-        <!--HEADER -->
+        <!--Home-Header button of navbar -->
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#topNavBar">
                 <span class="icon-bar"></span>
@@ -13,24 +13,24 @@
             </button>
             <a class="navbar-brand" href="/home/">JEA and Books</a>
         </div>
+
         <!--ITEMS: add login and logout with icons -->
         <div class="collapse navbar-collapse" id="topNavBar">
-            <ul class="nav navbar-nav">
-                <li class="">
-                    <a href="">
-                        <span class="glyphicon glyphicon-book" aria-hidden="true"></span>&nbsp; Books
-                    </a>
-                </li>
-
-            </ul>
-
             <form class="navbar-form navbar-left" role="search" method="get" action="#">
                 <div class="form-group">
                     <input type="text" class="form-control" name="q" value="">
                 </div>
                 <button type="submit" class="btn btn-default">Search</button>
             </form>
+
             {% if message %}
+                 <ul class="nav navbar-nav navbar-right">
+                    <li class="">
+                        <a href="">
+                            <span class="glyphicon glyphicon-book" aria-hidden="true"></span>&nbsp; Books
+                        </a>
+                    </li>
+                </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="">
                         <a href="/logout/">
@@ -39,6 +39,13 @@
                     </li>
                 </ul>
             {% else %}
+                 <ul class="nav navbar-nav navbar-right">
+                    <li class="">
+                        <a href="">
+                            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>&nbsp; Add User
+                        </a>
+                    </li>
+                </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="">
                         <a href="/login/">
