@@ -24,7 +24,7 @@
             </form>
 
             {% if username %}
-                 <ul class="nav navbar-nav navbar-right">
+                 <ul class="nav navbar-nav navbar-left">
                     <li class="">
                         <a href="">
                             <span class="glyphicon glyphicon-book" aria-hidden="true"></span>&nbsp; Add Books
@@ -34,14 +34,14 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li class="">
                         <a href="/logout/">
-                            <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp; Logout
+                            <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp; Logout of {{ username }}
                         </a>
                     </li>
                 </ul>
             {% else %}
                  <ul class="nav navbar-nav navbar-right">
                     <li class="">
-                        <a href="">
+                        <a href="/create_user/">
                             <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>&nbsp; Create Account
                         </a>
                     </li>
