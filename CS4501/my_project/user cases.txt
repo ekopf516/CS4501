@@ -1,3 +1,4 @@
+PROJECT THREE
 1. As a user, I want to be able to retrieve an existing book so that I can decide whether or not I want to buy it.
 
 2. As a user, I want to be able to see other users' details so that I can see what other types of people are looking at books.
@@ -11,3 +12,13 @@
 6. As a seller, I want to be able to delete a book so that others cannot view and attempt to buy it.
 
 7. As a user, I want to be able to delete my profile when I no longer want to use the site. 
+
+PROJECT FOUR
+1. As a user, I want to be able to create an account.
+
+2. As a user, I want to be able to log in and out of my account. 
+
+3. As a user, I want to be sure that my account cannot be logged into without the right credentials. 
+
+4. As a user, I want to be able to create a new listing.
+
