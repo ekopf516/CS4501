@@ -148,13 +148,11 @@ def create_user(request):
         form = forms.user_info()
         return render(request, 'create_user.html', {'message': 'invalid input', 'form': form, 'username': username})
 
-    # Sanitize username and password fields
     username = f.cleaned_data['user_name']
     password = f.cleaned_data['password']
     lastname = f.cleaned_data['last_name']
     firstname = f.cleaned_data['first_name']
 
-    # Send validated information to our experience layer
     post_data = {'user_name': username, 'password': password, 'last_name': lastname, 'first_name': firstname}
     post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
     req = urllib.request.Request('http://exp-api:8000/create_user/', data=post_encoded, method='POST')
@@ -169,8 +167,6 @@ def create_user(request):
         form = forms.user_info()
         return render(request, 'create_user.html', {'message': resp['resp']['resp'], 'form': form, 'username':username})
 
-    # If we made it here, we can log them in.
-    # Set their login cookie and redirect to back to wherever they came from
     authenticator = resp['resp']['resp']['authenticator']
 
     response = HttpResponseRedirect('http://localhost:8000/home/')
@@ -179,4 +175,54 @@ def create_user(request):
     return response
 
 
-# def create_book_listing(request):
+def create_book_listing(request):
+    username = None
+    if (request.COOKIES.get('auth', False)):
+        authenticator = request.COOKIES['auth']
+        post_data = {'authenticator': authenticator}
+        post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
+        req = urllib.request.Request('http://exp-api:8000/authenticate/', data=post_encoded, method='POST')
+        resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+        resp = json.loads(resp_json)
+
+        if (resp['resp']['status']):
+            username = resp['resp']['resp']['user_name']
+
+    if(not username): return render(request, 'create_book_listing.html', {'message': "you must be logged in to create a lisiting", 'username': username,})
+
+    if request.method == 'GET':
+        form = forms.book_info()
+        return render(request, 'create_book_listing.html', {'form': form, 'username':username})
+
+    f = forms.book_info(request.POST)
+
+    # Check if the form instance is invalid
+    if not f.is_valid():
+        # Form was bad -- send them back to login page and show them an error
+        form = forms.book_info()
+        return render(request, 'create_book_listing.html', {'message': 'invalid input', 'form': form, 'username': username})
+
+    title = f.cleaned_data['title']
+    author = f.cleaned_data['author']
+    publisher = f.cleaned_data['publisher']
+    price = f.cleaned_data['price']
+    isbn = f.cleaned_data['isbn_num']
+    pub_date = f.cleaned_data['pub_date']
+
+    post_data = {'title': title, 'author': author, 'publisher': publisher, 'price': price, 'isbn_num': isbn, 'pub_date':pub_date}
+    post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
+    req = urllib.request.Request('http://exp-api:8000/create_book_listing/', data=post_encoded, method='POST')
+    resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+    resp = json.loads(resp_json)
+
+    if (not resp['status']):
+        form = forms.book_info()
+        return render(request, 'create_book_listing.html', {'message': resp['resp'], 'form': form, 'username': username})
+
+    if (not resp['resp']['status']):
+        form = forms.book_info()
+        return render(request, 'create_book_listing.html', {'message': resp['resp']['resp'], 'form': form, 'username':username})
+
+    return HttpResponseRedirect('http://localhost:8000/home/')
+
+

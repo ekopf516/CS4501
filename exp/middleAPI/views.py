@@ -132,3 +132,23 @@ def logout(request):
             return JsonResponse({'status': True, 'resp': resp})
         else: return JsonResponse({'status': False, 'resp': 'invalid input'})
     return JsonResponse({'status': False, 'resp': 'URL only handles POST requests'})
+
+def create_book_listing(request):
+    if(request.method == 'POST'):
+        f = forms.book_info(request.POST)
+        if (f.is_valid()):
+            title = f.cleaned_data['title']
+            author = f.cleaned_data['author']
+            publisher = f.cleaned_data['publisher']
+            price = f.cleaned_data['price']
+            isbn = f.cleaned_data['isbn_num']
+            pub_date = f.cleaned_data['pub_date']
+            post_data = {'title': title, 'author': author, 'publisher': publisher, 'price': price, 'isbn_num': isbn,
+                         'pub_date': pub_date}
+            post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
+            req = urllib.request.Request(url='http://models-api:8000/createBook/', data=post_encoded, method='POST')
+            resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+            resp = json.loads(resp_json)
+            return JsonResponse({'status': True, 'resp': resp})
+        else: return JsonResponse({'status': False, 'resp': 'invalid input'})
+    return JsonResponse({'status': False, 'resp': 'URL only handles POST requests'})
