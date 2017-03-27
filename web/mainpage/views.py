@@ -8,17 +8,7 @@ from http import cookiejar
 def homePage(request):
     if (request.method == "GET"):
         #check if authenticated
-        username = None
-        if(request.COOKIES.get('auth', False)):
-            authenticator = request.COOKIES['auth']
-            post_data = {'authenticator': authenticator}
-            post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
-            req = urllib.request.Request('http://exp-api:8000/authenticate/', data=post_encoded, method='POST')
-            resp_json = urllib.request.urlopen(req).read().decode('utf-8')
-            resp = json.loads(resp_json)
-
-            if (resp['resp']['status']):
-                username = resp['resp']['resp']['user_name']
+        username = authenticate(request)
 
         req = urllib.request.Request('http://exp-api:8000/home_page/')
         resp_json = urllib.request.urlopen(req).read().decode('utf-8')
@@ -48,17 +38,7 @@ def bookView(request, book_id):
 
 def login(request):
     # If we received a GET request instead of a POST request
-    username = None
-    if (request.COOKIES.get('auth', False)):
-        authenticator = request.COOKIES['auth']
-        post_data = {'authenticator': authenticator}
-        post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
-        req = urllib.request.Request('http://exp-api:8000/authenticate/', data=post_encoded, method='POST')
-        resp_json = urllib.request.urlopen(req).read().decode('utf-8')
-        resp = json.loads(resp_json)
-
-        if (resp['resp']['status']):
-            username = resp['resp']['resp']['user_name']
+    username = authenticate(request)
 
     if request.method == 'GET':
         # display the login form page
@@ -120,17 +100,7 @@ def logout(request):
     else: return HttpResponseRedirect('http://localhost:8000/login/')
 
 def create_user(request):
-    username = None
-    if (request.COOKIES.get('auth', False)):
-        authenticator = request.COOKIES['auth']
-        post_data = {'authenticator': authenticator}
-        post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
-        req = urllib.request.Request('http://exp-api:8000/authenticate/', data=post_encoded, method='POST')
-        resp_json = urllib.request.urlopen(req).read().decode('utf-8')
-        resp = json.loads(resp_json)
-
-        if (resp['resp']['status']):
-            username = resp['resp']['resp']['user_name']
+    username = authenticate(request)
 
     if (request.COOKIES.get('auth', False) and request.method == 'GET'):
         form = forms.user_info()
@@ -176,17 +146,7 @@ def create_user(request):
 
 
 def create_book_listing(request):
-    username = None
-    if (request.COOKIES.get('auth', False)):
-        authenticator = request.COOKIES['auth']
-        post_data = {'authenticator': authenticator}
-        post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
-        req = urllib.request.Request('http://exp-api:8000/authenticate/', data=post_encoded, method='POST')
-        resp_json = urllib.request.urlopen(req).read().decode('utf-8')
-        resp = json.loads(resp_json)
-
-        if (resp['resp']['status']):
-            username = resp['resp']['resp']['user_name']
+    username = authenticate(request)
 
     if(not username): return render(request, 'create_book_listing.html', {'message': "you must be logged in to create a lisiting", 'username': username,})
 
@@ -224,5 +184,21 @@ def create_book_listing(request):
         return render(request, 'create_book_listing.html', {'message': resp['resp']['resp'], 'form': form, 'username':username})
 
     return HttpResponseRedirect('http://localhost:8000/home/')
+
+
+def authenticate(request):
+    username = None
+    if (request.COOKIES.get('auth', False)):
+        authenticator = request.COOKIES['auth']
+        post_data = {'authenticator': authenticator}
+        post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
+        req = urllib.request.Request('http://exp-api:8000/authenticate/', data=post_encoded, method='POST')
+        resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+        resp = json.loads(resp_json)
+
+        if (resp['resp']['status']):
+            username = resp['resp']['resp']['user_name']
+
+    return username
 
 
