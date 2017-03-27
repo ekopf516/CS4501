@@ -13,8 +13,7 @@ class user(models.Model):
     first_name = models.CharField(max_length=20)
     last_name  = models.CharField(max_length=20)
     user_name = models.CharField(max_length=30)
-    #need to check for duplicates
-    password = models.CharField(max_length=30, default="password")
+    password = models.CharField(max_length=900)
     bag = models.ManyToManyField(book, default=None)
 
 class Authenticator(models.Model):

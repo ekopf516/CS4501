@@ -9,6 +9,7 @@ from django.shortcuts import render, HttpResponse
 import os
 import hmac
 from project1 import settings
+from django.contrib.auth import hashers
 from django.views.decorators.csrf import csrf_protect
 
 def allUsers(request):
@@ -103,7 +104,11 @@ def createUser(request):
             for u in user.objects.all():
                 if(form.cleaned_data['user_name'] == u.user_name):
                     return JsonResponse({'status': False, 'resp': 'user already exists'})
-            form.save()
+            u = user(user_name=form.cleaned_data['user_name'],
+                     first_name=form.cleaned_data['first_name'],
+                     last_name=form.cleaned_data['last_name'],
+                     password=hashers.make_password(form.cleaned_data['password']))
+            u.save()
             return login(request)
         else: return JsonResponse({'status': False, 'resp': 'invalid input'})
     return JsonResponse({'status' : False, 'resp': 'This URL only handles POST requests'})
@@ -148,7 +153,7 @@ def login(request):
             if nouser:
                 return JsonResponse({'status': False, 'resp': 'invalid user info'})
 
-            if (theuser.password == form.cleaned_data['password']):
+            if (hashers.check_password(form.cleaned_data['password'], theuser.password)):
                 unique = True
                 while (unique):
                     authenticator = hmac.new(
