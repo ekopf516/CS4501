@@ -63,7 +63,7 @@ def login(request):
     password = f.cleaned_data['password']
 
     # Send validated information to our experience layer
-    post_data = {'user_name': username, 'password': password, 'last_name': 'a', 'firstname': 'b'}
+    post_data = {'user_name': username, 'password': password, 'last_name': 'a', 'first_name': 'b'}
     post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
     req = urllib.request.Request('http://exp-api:8000/login/', data=post_encoded, method='POST')
     resp_json = urllib.request.urlopen(req).read().decode('utf-8')
