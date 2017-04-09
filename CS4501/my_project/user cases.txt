@@ -22,3 +22,9 @@ PROJECT FOUR
 
 4. As a user, I want to be able to create a new listing.
 
+PROJECT FIVE
+1. As an authenticated user, I want to be able to create a new listing. 
+
+2. As a user, I want to be able to search for different listings. 
+
+3. As a user, I want to be able to view all relative listings after searching.
