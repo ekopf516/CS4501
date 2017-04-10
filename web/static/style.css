@@ -15,7 +15,7 @@ h1 {
 }
 div {
     font-family: Montserrat;
-    color: white;
+    color: black;
 }
 p {
     font-family: Montserrat;
@@ -23,7 +23,7 @@ p {
 }
 a{
     font-family: Montserrat;
-    color: white;
+    color: black;
 }
 
 @font-face {
