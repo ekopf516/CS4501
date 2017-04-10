@@ -1,0 +1,32 @@
+body{
+    background-image: url('./images/jea_home.png');
+    background-repeat: no-repeat;
+    background-size: 100%;
+
+}
+
+.navbar{
+    border-radius: 0;
+}
+
+h1 {
+    font-family: Montserrat;
+    color: white;
+}
+div {
+    font-family: Montserrat;
+    color: white;
+}
+p {
+    font-family: Montserrat;
+    color: white;
+}
+a{
+    font-family: Montserrat;
+    color: white;
+}
+
+@font-face {
+    font-family: "Montserrat";
+    src:url("./fonts/montserrat/Montserrat-Regular.ttf")
+}

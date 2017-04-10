@@ -26,7 +26,7 @@ web:
       - "8000:8000"
    volumes:
       - ./web:/app
-   command: bash -c "mod_wsgi-express start-server --reload-on-changes --url-alias /static ./web/static web/wsgi.py"
+   command: bash -c "mod_wsgi-express start-server --reload-on-changes --url-alias /static ./static web/wsgi.py"
 
 kafka:
     image: spotify/kafka
