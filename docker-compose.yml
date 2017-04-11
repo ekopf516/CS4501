@@ -4,14 +4,17 @@ models:
         -  mysql:db
     volumes:
         - ./CS4501:/app
+        - ./fixtures:/app/fixtures
     ports:
         - "8001:8000"
-    command: bash -c "python manage.py makemigrations my_project && python manage.py migrate && python manage.py loaddata db.json && mod_wsgi-express start-server --working-directory /app --reload-on-changes /app/project1/wsgi.py"
+    command: bash -c "python manage.py makemigrations my_project && python manage.py migrate && python manage.py loaddata fixtures/db.json && mod_wsgi-express start-server --working-directory /app --reload-on-changes /app/project1/wsgi.py"
 
 exp:
    image: tp33/django
    links:
       - models:models-api
+      - es:es
+      - kafka:kafka
    ports:
       - "8002:8000"
    volumes:
@@ -45,7 +48,10 @@ es:
 batch:
     image: tp33/django
     container_name: batch
+    volumes:
+        - ./batch:/app
+        - ./fixtures:/app/fixtures
     links:
         - kafka:kafka
         - es:es
-    command: bash -c "python /app/script.py"
+    command: bash -c "python script.py"

@@ -6,7 +6,10 @@ from django.http import JsonResponse
 import datetime
 from datetime import datetime as dtime
 from . import forms
+from kafka import KafkaProducer
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
+from elasticsearch import Elasticsearch
+
 
 def allBooks(request):
     if (request.method == "GET"):
@@ -149,6 +152,27 @@ def create_book_listing(request):
             req = urllib.request.Request(url='http://models-api:8000/createBook/', data=post_encoded, method='POST')
             resp_json = urllib.request.urlopen(req).read().decode('utf-8')
             resp = json.loads(resp_json)
-            return JsonResponse({'status': True, 'resp': resp})
-        else: return JsonResponse({'status': False, 'resp': 'invalid input'})
+            #kafka stuff
+            if(resp['status'] == True):
+                producer = KafkaProducer(bootstrap_servers='kafka:9092')
+                some_new_listing = {'title': title, 'author': author,
+                                    'id': resp['pk']}
+                producer.send('new-listings-topic', json.dumps(some_new_listing).encode('utf-8'))
+                return JsonResponse({'status': True, 'resp': resp})
+
+            else: return JsonResponse({'status': False, 'resp': resp['resp']})
+        else: return JsonResponse({'status': False, 'resp': 'experience layer form does not validate'})
     return JsonResponse({'status': False, 'resp': 'URL only handles POST requests'})
+
+
+def search(request):
+    if (request.method == 'POST'):
+        es = Elasticsearch([{'host': 'es', 'port': 9200}])
+        es.indices.refresh(index="listing_index")
+        results = es.search(index='listing_index',
+                            body={'query': {'query_string': {'query': request.POST['searchquery']}}, 'size': 10})
+        if (results['hits']['total'] > 0):
+            return JsonResponse({'status': True, 'resp': results['hits']['hits']})
+        else:
+            return JsonResponse({'status': False, 'resp': 'no results found'})
+    else: return JsonResponse({'status': False, 'resp': 'URL only handles POST requests'})

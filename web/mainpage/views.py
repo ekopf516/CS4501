@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from . import forms
 from http import cookiejar
 
+
 def homePage(request):
     if (request.method == "GET"):
         #check if authenticated
@@ -184,6 +185,31 @@ def create_book_listing(request):
         return render(request, 'create_book_listing.html', {'message': resp['resp']['resp'], 'form': form, 'username':username})
 
     return HttpResponseRedirect('http://localhost:8000/home/')
+
+
+def search(request):
+    #figure out how to get shit from the search bar
+    if(request.method == 'POST'):
+        post_data = {'searchquery': request.POST['searchquery']}
+        post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
+        req = urllib.request.Request('http://exp-api:8000/search/', data=post_encoded, method='POST')
+        resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+        resp = json.loads(resp_json)
+        if(resp['status']):
+            titles = []
+            ids = []
+            for item in resp['resp']:
+                titles.append(item['_source']['title'])
+                ids.append(item['_source']['id'])
+            all = zip(titles, ids)
+            return render(request, 'search.html', {'AllBooks': all})
+        else:
+            return render(request, 'search.html', {'message': resp['resp']})
+
+    else: return render(request, 'search.html', {'message': 'please search something'})
+
+
+
 
 
 def authenticate(request):

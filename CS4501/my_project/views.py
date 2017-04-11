@@ -11,6 +11,7 @@ import hmac
 from project1 import settings
 from django.contrib.auth import hashers
 from django.views.decorators.csrf import csrf_protect
+import json
 
 def allUsers(request):
     if (request.method == "GET"):
@@ -117,9 +118,9 @@ def createBook(request):
     if request.method == "POST":
         form = BookForm(data=request.POST)
         if(form.is_valid()):
-            form.save()
-            return JsonResponse({'status': True, 'resp' : 'book has been created.'})
-        else: return JsonResponse({'status': False, 'resp': 'invalid input'})
+            f = form.save()
+            return JsonResponse({'status': True, 'resp' : 'book has been created.', 'pk': f.pk})
+        else: return JsonResponse({'status': False, 'resp': 'models layer form did not validate'})
     return JsonResponse({'status' : False, 'resp': 'This URL only handles POST requests'})
 
 
