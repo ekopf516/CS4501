@@ -12,7 +12,7 @@ class GetDetailsTestCase(TestCase):
     # retrieving an existing book
     def test_foundBook(self):
         c = Client()
-        response = c.get('^book_display/1')
+        response = c.get('^book_display/1/')
         result = response.content.decode('utf-8')
         result = json.loads(result)
         correct = {'status':True, 'resp':{"title": "Goats: a how to", "author": "Moose", "publisher": "TKE", "pub_date": "2017-02-27T00:00:00Z", "isbn_num": "9737223329", "price": 25}}
@@ -22,7 +22,7 @@ class GetDetailsTestCase(TestCase):
     # retrieving an existing user
     def test_foundUser(self):
         c = Client()
-        response = c.get('^user_display/2')
+        response = c.get('^user_display/2/')
         result = response.content.decode('utf-8')
         result = json.loads(result)
         correct = {'status':True, 'resp':{"first_name": "aaron", "last_name": "agohub", "user_name": "AA ron", "password": "ISA.........", "bag": []}}
@@ -32,7 +32,7 @@ class GetDetailsTestCase(TestCase):
     # try retrieving a book that doesn't exist
     def test_bookNotFound(self):
         c = Client()
-        response = c.get('^book_display/7')
+        response = c.get('^book_display/7/')
         result = response.content.decode('utf-8')
         result = json.loads(result)
         correct = {'status': False, 'message': "No book was found with that ID", 'data': None}
@@ -42,7 +42,7 @@ class GetDetailsTestCase(TestCase):
     # try retrieving a user that doesn't exist
     def test_userNotFound(self):
         c = Client()
-        response = c.get('^user_display/9')
+        response = c.get('^user_display/9/')
         result = response.content.decode('utf-8')
         result = json.loads(result)
         correct = {'status': False, 'message': "No user was found with that ID", 'data': None}
@@ -106,7 +106,7 @@ class bookDeleteTest(TestCase):
     # remove a book that exists
     def test_removeBookFound(self):
         c = Client()
-        response = c.get('^removeBook/1')
+        response = c.get('^removeBook/1/')
         result = response.content.decode('utf-8')
         result = json.loads(result)
         correct = {'status': True, 'resp': 'Book Deleted'}
@@ -116,7 +116,7 @@ class bookDeleteTest(TestCase):
     # remove a book that doesn't exist
     def test_removeBookNotFound(self):
         c = Client()
-        response = c.get('^removeBook/8')
+        response = c.get('^removeBook/8/')
         result = response.content.decode('utf-8')
         result = json.loads(result)
         correct = {'status': False, 'resp': 'Book Not Found'}
@@ -137,7 +137,7 @@ class userDeleteTest(TestCase):
     # test removing a user that exists
     def test_removeUserFound(self):
         c = Client()
-        response = c.get('^removeUser/3')
+        response = c.get('^removeUser/3/')
         result = response.content.decode('utf-8')
         result = json.loads(result)
         correct = {'status': True, 'resp': 'User Deleted'}
@@ -147,7 +147,7 @@ class userDeleteTest(TestCase):
     # test removing a user that does not exist
     def test_removeUserNotFound(self):
         c = Client()
-        response = c.get('/^removeUser/29')
+        response = c.get('/^removeUser/29/')
         result = response.content.decode('utf-8')
         result = json.loads(result)
         correct = {'status': False, 'resp': 'User Not Found'}
