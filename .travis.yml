@@ -1,41 +1,40 @@
 services: 
-	-docker
+  - docker
 
 language: python
 
 python:
-	-3.6.0
+  - 3.6
 
 sudo: required
 
 env:
-	DOCKER_COMPOSE_VERSION: 1.8.0
+  DOCKER_COMPOSE_VERSION: 1.8.0
 
 before_install:
-	- docker pull mysql
-	- mkdir db 
-	- docker run --name mysql -d -e MYSQL\_ROOT\_PASSWORD='$3cureUS' -v ~/cs4501/db:/var/lib/mysql mysql:5.7.14
-	- sleep 15 # waiting for container to start 
-	- >
-	  docker run -it --name mysql-cmdline --link mysql:db mysql:5.7.14
-	  mysql -uroot -p'$3cureUS' -h db -v -e
-	 "CREATE DATABASE cs4501 CHARACTER SET utf8;
-         CREATE USER 'www'@'%' IDENTIFIED BY '\$3cureUS';
-         GRANT ALL ON *.* TO 'www'@'%';
-	 GRANT ALL ON test_cs4501.* to 'www'@'%';"
+  - docker pull mysql
+  - mkdir db 
+  - docker run --name mysql -d -e MYSQL\_ROOT\_PASSWORD='$3cureUS' -v ~/cs4501/db:/var/lib/mysql mysql:5.7.14
+  - sleep 15 # waiting for container to start 
+  - >
+   docker run -it --name mysql-cmdline --link mysql:db mysql:5.7.14
+   mysql -uroot -p'$3cureUS' -h db -v -e
+   "CREATE DATABASE cs4501 CHARACTER SET utf8;
+   CREATE USER 'www'@'%' IDENTIFIED BY '\$3cureUS';
+   GRANT ALL ON *.* TO 'www'@'%';
+   GRANT ALL ON test_cs4501.* to 'www'@'%';"
 
 before_script:
-	- docker start mysql
-	- docker-compouse up -d
-	- sleep 10
+  - docker start mysql
+  - docker-compose up -d
+  - sleep 10
 
 script:
-	- docker ps -a 
-	- docker exec -it models bash -c "python manage.py test --no-input" 
+  - docker ps -a 
+  - docker exec -it app_models_1 bash -c "python ./manage.py test --no-input" 
 
 after_script:
-	- docker-compose down
-	- docker rm 'docker ps -a -q'
-	- docker rmi 'docker images -q'
-	- rm -rf db
-	
+  - docker-compose down
+  - docker rm 'docker ps -a -q'
+  - docker rmi 'docker images -q'
+  - rm -rf db
