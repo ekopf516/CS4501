@@ -56,11 +56,4 @@ batch:
         - es:es
     command: bash -c "python script.py"
 
-haproxy:
-    image: my-haproxy
-    container_name: haproxy
-    links:
-        - web
-        - web2
-    volumes:
-        -./haproxy/:/haproxy.cfg
+
