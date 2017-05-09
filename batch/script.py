@@ -11,7 +11,6 @@ def batch():
             KafkaConsumer('new-listings-topic', group_id='listing-indexer', bootstrap_servers=['kafka:9092'])
             ready = True
         except:
-            print("checked")
             time.sleep(10)
 
     consumer = KafkaConsumer('new-listings-topic', group_id='listing-indexer', bootstrap_servers=['kafka:9092'])

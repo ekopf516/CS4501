@@ -28,12 +28,16 @@ def homePage(request):
 
 def bookView(request, book_id):
     if (request.method == "GET"):
-        req = urllib.request.Request('http://exp-api:8000/book_display/' + book_id + '/')
+        username = authenticate(request)
+        user_data = {'username': username}
+        encoded = urllib.parse.urlencode(user_data).encode('utf-8')
+        req = urllib.request.Request('http://exp-api:8000/book_display/' + book_id + '/', data=encoded)
         resp_json = urllib.request.urlopen(req).read().decode('utf-8')
         resp = json.loads(resp_json)
         if (resp['resp']['status'] == False):
             return render(request, 'noBook.html')
         resp = resp['resp']['resp']
+        resp['username'] = username
         # return JsonResponse({'status': True, 'resp': resp})
         return render(request, 'book.html', resp)
 
@@ -103,7 +107,7 @@ def logout(request):
 def create_user(request):
     username = authenticate(request)
 
-    if (request.COOKIES.get('auth', False) and request.method == 'GET'):
+    if (request.COOKIES.get('auth', False) and request.method == 'GET' and username):
         form = forms.user_info()
         return render(request, 'create_user.html', {'message': "you are already logged in are you sure you want to create another account?", 'form': form, 'username': username})
 

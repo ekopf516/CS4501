@@ -35,12 +35,18 @@ def userInfo(request, user_id):
     return JsonResponse({'status': False, 'resp': 'URL only handles GET requests'})
 
 def bookInfo(request, book_id):
-    if (request.method == "GET"):
+    if (request.method == "POST"):
         req = urllib.request.Request('http://models-api:8000/book_display/' + book_id + '/')
         resp_json = urllib.request.urlopen(req).read().decode('utf-8')
-        return JsonResponse({'status': True, 'resp': json.loads(resp_json)})
+        username = request.POST['username']
+        resp = json.loads(resp_json)
+        if(resp['status'] == True and username != None):
+            producer = KafkaProducer(bootstrap_servers='kafka:9092')
+            some_new_grouping = {'user': username, 'book': book_id}
+            producer.send('user-book-pairs', json.dumps(some_new_grouping).encode('utf-8'))
+        return JsonResponse({'status': True, 'resp': resp})
 
-    return JsonResponse({'status': False, 'resp': 'URL only handles GET requests'})
+    return JsonResponse({'status': False, 'resp': 'URL only handles POST requests'})
 
 def homepage(request):
     if (request.method == "GET"):
@@ -155,8 +161,7 @@ def create_book_listing(request):
             #kafka stuff
             if(resp['status'] == True):
                 producer = KafkaProducer(bootstrap_servers='kafka:9092')
-                some_new_listing = {'title': title, 'author': author,
-                                    'id': resp['pk']}
+                some_new_listing = {'title': title, 'author': author, 'id': resp['pk']}
                 producer.send('new-listings-topic', json.dumps(some_new_listing).encode('utf-8'))
                 return JsonResponse({'status': True, 'resp': resp})
 
