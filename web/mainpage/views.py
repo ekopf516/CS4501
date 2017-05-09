@@ -57,7 +57,7 @@ def login(request):
     if not f.is_valid():
       # Form was bad -- send them back to login page and show them an error
       form = forms.login_form()
-      return render(request, 'login.html', {'message': 'invalid input', 'form': form, 'username': username})
+      return render(request, 'login.html', {'message': 'invalid input', 'form': form})
 
     # Sanitize username and password fields
     username = f.cleaned_data['user_name']
@@ -74,7 +74,7 @@ def login(request):
     if (not resp['resp']['status']):
       # Couldn't log them in, send them back to login page with error
       form = forms.login_form()
-      return render(request, 'login.html', {'message': 'username or password is incorrect', 'form': form, 'username':username})
+      return render(request, 'login.html', {'message': 'username or password is incorrect', 'form': form})
 
     #If we made it here, we can log them in.
     # Set their login cookie and redirect to back to wherever they came from
@@ -189,6 +189,8 @@ def create_book_listing(request):
 
 def search(request):
     #figure out how to get shit from the search bar
+    username = authenticate(request)
+
     if(request.method == 'POST'):
         post_data = {'searchquery': request.POST['searchquery']}
         post_encoded = urllib.parse.urlencode(post_data).encode('utf-8')
@@ -202,9 +204,9 @@ def search(request):
                 titles.append(item['_source']['title'])
                 ids.append(item['_source']['id'])
             all = zip(titles, ids)
-            return render(request, 'search.html', {'AllBooks': all})
+            return render(request, 'search.html', {'AllBooks': all, 'username': username})
         else:
-            return render(request, 'search.html', {'message': resp['resp']})
+            return render(request, 'search.html', {'message': resp['resp'], 'username': username})
 
     else: return render(request, 'search.html', {'message': 'please search something'})
 
