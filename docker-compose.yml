@@ -55,3 +55,5 @@ batch:
         - kafka:kafka
         - es:es
     command: bash -c "python script.py"
+
+
