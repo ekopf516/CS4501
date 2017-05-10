@@ -136,11 +136,11 @@ def create_user(request):
 
     if (not resp['status']):
         form = forms.user_info()
-        return render(request, 'create_user.html', {'message': resp['resp'], 'form': form, 'username': username})
+        return render(request, 'create_user.html', {'message': resp['resp'], 'form': form})
 
     if (not resp['resp']['status']):
         form = forms.user_info()
-        return render(request, 'create_user.html', {'message': resp['resp']['resp'], 'form': form, 'username':username})
+        return render(request, 'create_user.html', {'message': resp['resp']['resp'], 'form': form})
 
     authenticator = resp['resp']['resp']['authenticator']
 

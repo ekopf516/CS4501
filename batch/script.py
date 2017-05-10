@@ -9,12 +9,12 @@ def batch():
     while(not ready):
         try:
             KafkaConsumer('new-listings-topic', group_id='listing-indexer', bootstrap_servers=['kafka:9092'])
+            es = Elasticsearch([{'host': 'es', 'port': 9200}])
             ready = True
         except:
             time.sleep(10)
 
     consumer = KafkaConsumer('new-listings-topic', group_id='listing-indexer', bootstrap_servers=['kafka:9092'])
-    es = Elasticsearch([{'host': 'es', 'port': 9200}])
 
     with open('fixtures/db.json') as json_data:
         d = json.load(json_data)
