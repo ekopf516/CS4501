@@ -55,6 +55,15 @@ batch:
         - kafka:kafka
         - es:es
     command: bash -c "python script.py"
+    
+haproxy:
+   build: ./haproxy
+   container_name: haproxy
+   ports:
+      - "8000:8000"
+   links:
+      - web1:web1
+      - web2:web2
 
 spark_batch:
     image: tp33/django
