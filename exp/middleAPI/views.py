@@ -44,6 +44,13 @@ def bookInfo(request, book_id):
             producer = KafkaProducer(bootstrap_servers='kafka:9092')
             some_new_grouping = {'user': username, 'book': book_id}
             producer.send('user-book-pairs', json.dumps(some_new_grouping).encode('utf-8'))
+
+        # req = urllib.request.Request('http://models-api:8000/recommendations/' + book_id + '/')
+        # r_json = urllib.request.urlopen(req).read().decode('utf-8')
+        # r = json.loads(r_json)
+        # return JsonResponse({'status': True, 'resp': r})
+        # if(r['resp']['status']):
+        #     resp['reocList'] = r['resp']['resp']
         return JsonResponse({'status': True, 'resp': resp})
 
     return JsonResponse({'status': False, 'resp': 'URL only handles POST requests'})

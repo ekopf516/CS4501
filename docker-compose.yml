@@ -69,6 +69,8 @@ spark_batch:
 spark-master:
   image: gettyimages/spark
   command: bin/spark-class org.apache.spark.deploy.master.Master -h spark-master
+  external_links:
+        -  mysql:db
   container_name: spark-master
   hostname: spark-master
   environment:
@@ -94,6 +96,8 @@ spark-master:
 spark-worker:
   image: gettyimages/spark
   command: bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
+  external_links:
+        -  mysql:db
   container_name: spark-worker
   hostname: spark-worker
   environment:

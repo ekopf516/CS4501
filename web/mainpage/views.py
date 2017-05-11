@@ -37,6 +37,7 @@ def bookView(request, book_id):
         if (resp['resp']['status'] == False):
             return render(request, 'noBook.html')
         resp = resp['resp']['resp']
+
         resp['username'] = username
         # return JsonResponse({'status': True, 'resp': resp})
         return render(request, 'book.html', resp)

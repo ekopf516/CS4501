@@ -16,6 +16,10 @@ class user(models.Model):
     password = models.CharField(max_length=900)
     bag = models.ManyToManyField(book, default=None)
 
+class recomendation(models.Model):
+    book_id = models.IntegerField()
+    recommendations = models.CharField(max_length=1000)
+
 class Authenticator(models.Model):
     user_id = models.IntegerField()
     date_created = models.DateTimeField(default=timezone.now)

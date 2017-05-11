@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from .forms import UserForm, BookForm, authenticate_form
 from django.forms import model_to_dict
-from .models import user, book, Authenticator
+from .models import user, book, Authenticator, recomendation
 from datetime import datetime as dtime
 import datetime
 from django.utils import timezone
@@ -97,6 +97,24 @@ def viewBook(request, book_id):
             return JsonResponse({'status': False, 'resp': 'invalid input'})
 
     return JsonResponse({'status': False, 'resp': 'URL only handles GET and POST requests'})
+
+def getRecommendations(request, book_id):
+    if not book.objects.filter(id=book_id):
+        return JsonResponse({'status': False, 'message': "No book was found with that ID", 'data': None})
+    if recomendation.objects.filter(book_id = book_id):
+        recoList = recomendation.objects.get(book_id =book_id).recommendations
+    else:
+        return JsonResponse({'status': False, 'message': "No recommendations found", 'data': None})
+    recoList = recoList.split(",")
+    bookList = []
+    del recoList[-1]
+    for b in recoList:
+        if(b != ""):
+            b = int(b)
+            if (book.objects.filter(pk = b)):
+                bookList.append((b, book.objects.get(pk = b).title))
+    return JsonResponse({'status': True, 'resp': bookList})
+
 
 def createUser(request):
     if request.method == "POST":

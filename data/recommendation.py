@@ -1,5 +1,6 @@
 from pyspark import SparkContext
 import itertools
+import MySQLdb
 
 
 def spark():
@@ -20,8 +21,34 @@ def spark():
     final = sum.filter(lambda x: x[1] > 2)
     output = final.collect()
 
-    for user, list_pairs in output:
-        print(str(user) + "\t" + str(list_pairs) + "\n")
+    # Open database connection
+    db = MySQLdb.connect("db", "www", "$3cureUS", "cs4501")
+
+    # prepare a cursor object using cursor() method
+    cursor = db.cursor()
+
+    # execute SQL query using execute() method.
+    cursor.execute("SELECT * FROM my_project_book;")
+
+    count=len(cursor.fetchall())
+
+    recco = {str(k): [] for k in range(count+1)}
+
+    for list_pairs, three in output:
+        recco[str(list_pairs[0])].append(str(list_pairs[1]))
+        recco[str(list_pairs[1])].append(str(list_pairs[0]))
+
+    cursor.execute("TRUNCATE table my_project_recomendation;")
+
+    for kv in recco.items():
+        id = kv[0]
+        print (kv)
+        if(len(kv[1]) > 0):
+            l = ""
+            for item in kv[1]:
+                l += item + ", "
+            print(l)
+            cursor.execute("INSERT INTO my_project_recomendation (`book_id`, `recommendations`) VALUES (%s, %s);", (id, l))
 
     sc.stop()
 
