@@ -28,3 +28,8 @@ PROJECT FIVE
 2. As a user, I want to be able to search for different listings. 
 
 3. As a user, I want to be able to view all relative listings after searching.
+
+PROJECT SEVEN
+1. As a user, I want to be able to view relevant recommendations based on what other people have viewed. 
+
+2. As a user, I want to be able to click on these recommendations and view their information. 
